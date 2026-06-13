@@ -78,6 +78,7 @@ class RenderedMessage {
             datep.className = 'time'
 
         let date = new Date(time * 1000)
+        this.time = date.getTime()
 
         timep.textContent = date.toLocaleTimeString('en-US', {
             hour: '2-digit',
@@ -91,6 +92,12 @@ class RenderedMessage {
 
         this.chatside.append(timep)
         this.chatside.append(datep)
+
+        return this
+    }
+
+    setreplyid(replyid) {
+        this.replyid = replyid
 
         return this
     }
@@ -117,6 +124,35 @@ class RenderedMessage {
 
         text.innerHTML = toset
         this.chatmain.append(text)
+
+        let curtime = Date.now()
+        let diff = (curtime-this.time)/1000 // something about this is super wrong and i dont wanna figure it out right now
+        if (this.replyid && diff < 15) {
+            this.chatmain.animate([
+                { 
+                    color: "yellow",
+                },
+                { 
+                    color: window.getComputedStyle(this.chatmain).getPropertyValue("color"),
+                }
+            ], {
+                duration : 800,
+                iterations: 5
+            })
+
+            this.chatmain.getElementsByTagName("p")[0].animate([
+                { transform: "rotate(0deg)" },
+                { transform: "rotate(-1deg)" },
+                { transform: "rotate(1deg)" },
+                { transform: "rotate(-1deg)" },
+                { transform: "rotate(1deg)" },
+                { transform: "rotate(0deg)" },
+            ], {
+                easing: "ease-in-out",
+                duration : 800,
+                iterations: 5
+            })
+        }
 
         return this
     }
@@ -146,10 +182,11 @@ function renderchat(messagedata) {
     let rendered = 
         new RenderedMessage()
             .setname(messagedata.name)
+            .settime(messagedata.time)
+            .setreplyid(messagedata.replyid)
             .setcontent(messagedata.content)
             .addicon(messagedata.icon)
             .setid(messagedata.id)
-            .settime(messagedata.time)
     
     return rendered
 }

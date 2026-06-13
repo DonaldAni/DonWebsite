@@ -62,32 +62,6 @@ Elements.CHATBAR.addEventListener('keydown', async (e)=>{
                 let replyto = msgs[msgs.length-i]
                 let chatmain = replyto.getElementsByClassName("chatmain")[0]
 
-                setTimeout(function() {
-                    chatmain.getElementsByTagName("p")[0].animate([
-                        { 
-                            color: "yellow",
-                        },
-                        { 
-                            color: window.getComputedStyle(chatmain).getPropertyValue("color"),
-                        }
-                    ], {
-                        duration : 800,
-                        iterations: 5
-                    })
-                    chatmain.getElementsByTagName("p")[0].animate([
-                        { transform: "rotate(0deg)" },
-                        { transform: "rotate(-1deg)" },
-                        { transform: "rotate(1deg)" },
-                        { transform: "rotate(-1deg)" },
-                        { transform: "rotate(1deg)" },
-                        { transform: "rotate(0deg)" },
-                    ], {
-                        easing: "ease-in-out",
-                        duration : 800,
-                        iterations: 5
-                    })
-                },1)
-
                 replyid = replyto.getAttribute("id")
                 // this is kind of disgusting but i'm sure its fine?
                 name = chatmain.getElementsByTagName("p")[0].innerText.match(/<([^>]+)>/)[1] // i'll learn regex one day..
