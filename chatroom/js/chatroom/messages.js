@@ -125,35 +125,6 @@ class RenderedMessage {
         text.innerHTML = toset
         this.chatmain.append(text)
 
-        let curtime = Date.now()
-        let diff = (curtime-this.time)/1000 // something about this is super wrong and i dont wanna figure it out right now
-        if (this.replyid && diff < 15) {
-            this.chatmain.animate([
-                { 
-                    color: "yellow",
-                },
-                { 
-                    color: window.getComputedStyle(this.chatmain).getPropertyValue("color"),
-                }
-            ], {
-                duration : 800,
-                iterations: 5
-            })
-
-            this.chatmain.getElementsByTagName("p")[0].animate([
-                { transform: "rotate(0deg)" },
-                { transform: "rotate(-1deg)" },
-                { transform: "rotate(1deg)" },
-                { transform: "rotate(-1deg)" },
-                { transform: "rotate(1deg)" },
-                { transform: "rotate(0deg)" },
-            ], {
-                easing: "ease-in-out",
-                duration : 800,
-                iterations: 5
-            })
-        }
-
         return this
     }
 
@@ -214,8 +185,39 @@ export function rendermessage(message) {
         break
     }
 }
-
 import { HISTORY } from './elements.js'
+export function doreply(replyid) {
+    let replymsg = document.getElementById(replyid)
+    setTimeout(function() {
+        replymsg.getElementsByTagName("p")[0].animate([
+            { 
+                color: "yellow",
+            },
+            { 
+                color: window.getComputedStyle(replymsg).getPropertyValue("color"),
+            }
+        ], {
+            duration : 800,
+            iterations: 5
+        })
+
+        replymsg.getElementsByTagName("p")[0].animate([
+            { transform: "rotate(0deg)" },
+            { transform: "rotate(-1deg)" },
+            { transform: "rotate(1deg)" },
+            { transform: "rotate(-1deg)" },
+            { transform: "rotate(1deg)" },
+            { transform: "rotate(0deg)" },
+        ], {
+            easing: "ease-in-out",
+            duration : 800,
+            iterations: 5
+        })
+    },1)
+
+}
+
+
 export function sendsystemmessage(content) {
     let message = new SystemMessage(content)
     let rendered = rendermessage(message)

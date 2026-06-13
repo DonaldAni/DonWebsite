@@ -21,7 +21,7 @@ import { getrandomicon, MAX_ICON_ID } from './icons.js'
 
 // message stuff
 import { MessageType, Message, SystemMessage } from './messages.js'
-import { rendermessage } from './messages.js'
+import { rendermessage, doreply } from './messages.js'
 
 // hooks
 Elements.CHATBAR.addEventListener('keydown', async (e)=>{
@@ -66,6 +66,8 @@ Elements.CHATBAR.addEventListener('keydown', async (e)=>{
                 // this is kind of disgusting but i'm sure its fine?
                 name = chatmain.getElementsByTagName("p")[0].innerText.match(/<([^>]+)>/)[1] // i'll learn regex one day..
                 text+=" (replying to "+name+")"
+
+                doreply(replyid)
             }
         }
 
@@ -175,6 +177,13 @@ async function pingserver() {
                 if(thisnotifsound !== Sounds.RECIEVE_SOUND) {
                     notifsoundtoplay = thisnotifsound // will play the last special notif sound if one exists
                 }
+            }
+
+            let curtime = Date.now() / 1000
+            let diff = (curtime-message.time) // something about this is super wrong and i dont wanna figure it out right now
+            console.log(diff)
+            if (message.replyid && diff < 15) {
+                doreply(message.replyid)
             }
         }
 
