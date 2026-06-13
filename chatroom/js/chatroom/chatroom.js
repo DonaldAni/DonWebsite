@@ -1,6 +1,7 @@
 // constants
 const CHATROOM_ENDPOINT = "https://phil.kayladotcom.org/donchatroom"
 const PING_INTERVAL = 5000
+const TIMEOUT_THRESHOLD = PING_INTERVAL * 2
 
 // sounds
 import * as Sounds from './sounds.js'
@@ -24,6 +25,64 @@ import { MessageType, Message, SystemMessage } from './messages.js'
 import { rendermessage, doreply } from './messages.js'
 
 // hooks
+const socket = new WebSocket(
+    "wss://phil.kayladotcom.org/donchatroom/ws"
+)
+
+let outgoingmessages = []
+let lastpinged = Date.now()
+socket.onmessage = function(payload) {
+    let raw = payload
+    payload = JSON.parse(payload.data)
+    console.log(payload)
+    switch(payload.event) {
+        case "chat":
+            let message = payload.message
+
+            if(document.getElementById(message.id)) {
+                return
+            }
+
+            let rendered = rendermessage(message)
+            Elements.HISTORY.append(rendered.element)
+            Elements.HISTORY.scrollTop = Elements.HISTORY.scrollHeight
+
+            let notifsound = Sounds.RECIEVE_SOUND
+            let special = checkifspecial(message.name)
+            if(special) {
+                notifsound = special.getnotifsound()
+            }
+
+            let curtime = Date.now() / 1000
+            let diff = (curtime-message.time) // something about this is super wrong and i dont wanna figure it out right now
+            console.log(diff)
+            if (message.replyid && diff < 15) {
+                doreply(message.replyid)
+            }
+
+            if(!outgoingmessages.includes(message.id)) {
+                notifsound.play()
+            } else {
+                outgoingmessages.splice(outgoingmessages.indexOf(message.id), 1)
+            }
+        break
+
+        case "newtopic":
+            if(payload.topic !== ChatState.knowntopic) {
+                ChatState.settopic(payload.topic)
+            }
+        break
+
+        case "ping":
+            socket.send(JSON.stringify({
+                event: "pong"
+            }))
+
+            lastpinged = Date.now()
+        break
+    }
+}
+
 Elements.CHATBAR.addEventListener('keydown', async (e)=>{
     if(ChatState.connected && e.key === "Enter") {
         e.preventDefault()
@@ -73,6 +132,7 @@ Elements.CHATBAR.addEventListener('keydown', async (e)=>{
 
         console.log(Profile)
         let message = new Message(Profile.name, Profile.icon, text, MessageType.CHAT,replyid)
+        outgoingmessages.push(message.id)
         
         const response = await fetch(CHATROOM_ENDPOINT + "/send", {
             method: "POST",
@@ -86,7 +146,8 @@ Elements.CHATBAR.addEventListener('keydown', async (e)=>{
             switch(response.status) {
                 case 503:
                     alert("The chatroom service is currently offline")
-                    disconnect()
+                    ChatState.disconnect()
+                    socket.close()
                 break
 
                 case 429:
@@ -101,9 +162,9 @@ Elements.CHATBAR.addEventListener('keydown', async (e)=>{
         }
         
         // render new message
-        let rendered = rendermessage(message)
-        Elements.HISTORY.append(rendered.element)
-        Elements.HISTORY.scrollTop = Elements.HISTORY.scrollHeight
+        // let rendered = rendermessage(message)
+        // Elements.HISTORY.append(rendered.element)
+        // Elements.HISTORY.scrollTop = Elements.HISTORY.scrollHeight
 
         Sounds.SEND_SOUND.play()
     }
@@ -197,12 +258,10 @@ async function pingserver() {
         console.log("failed to pign server " + ChatState.lastsuccessfulping)
         if(Date.now() - ChatState.lastsuccessfulping > PING_INTERVAL * 5) {
             alert("Lost connection to chatroom server, refresh the tab?")
-            disconnect()
-        }
-    }
 
-    if(ChatState.connected) {
-        setTimeout(pingserver, PING_INTERVAL)
+            ChatState.disconnect()
+            socket.close()
+        }
     }
 }
 
@@ -223,9 +282,23 @@ async function init() {
         Profile.seticon(getrandomicon())
     }
 
-    // start spinning the pinging
+    // get history
     await pingserver()
     ChatState.loadedinitialmessages = true
 }
-
+ 
 init()
+
+function checkfordisconnect() {
+    if(Date.now() - lastpinged > TIMEOUT_THRESHOLD) {
+        alert("Lost connection to chatroom server, refresh the tab?")
+
+        ChatState.disconnect()
+        socket.close()
+    }
+
+    if(ChatState.connected) {
+        setTimeout(checkfordisconnect, 1000)
+    }
+}
+checkfordisconnect()
