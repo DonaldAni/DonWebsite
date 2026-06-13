@@ -1,7 +1,7 @@
 // constants
 const CHATROOM_ENDPOINT = "https://phil.kayladotcom.org/donchatroom"
 const PING_INTERVAL = 5000
-const TIMEOUT_THRESHOLD = PING_INTERVAL * 2
+const TIMEOUT_THRESHOLD = 60*1000
 
 // sounds
 import * as Sounds from './sounds.js'
