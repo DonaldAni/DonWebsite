@@ -42,8 +42,61 @@ Elements.CHATBAR.addEventListener('keydown', async (e)=>{
             savestuff(Profile.name, Profile.icon)
         }
 
+        let replyid = null
+        // ose was here
+        if (text.startsWith("^")) {
+            console.log("hi")
+            let char = text.charAt(0)
+            let i = 0
+            let cancel = false
+            while (char === "^") {
+                if (i > 35) { // too much
+                    cancel = true
+                    break
+                }
+                i++
+                char = text.charAt(i)
+            }
+            if (!cancel) {
+                let msgs = Elements.HISTORY.querySelectorAll(".chat")
+                let replyto = msgs[msgs.length-i]
+                let chatmain = replyto.getElementsByClassName("chatmain")[0]
+
+                setTimeout(function() {
+                    chatmain.getElementsByTagName("p")[0].animate([
+                        { 
+                            color: "yellow",
+                        },
+                        { 
+                            color: window.getComputedStyle(chatmain).getPropertyValue("color"),
+                        }
+                    ], {
+                        duration : 800,
+                        iterations: 5
+                    })
+                    chatmain.getElementsByTagName("p")[0].animate([
+                        { transform: "rotate(0deg)" },
+                        { transform: "rotate(-1deg)" },
+                        { transform: "rotate(1deg)" },
+                        { transform: "rotate(-1deg)" },
+                        { transform: "rotate(1deg)" },
+                        { transform: "rotate(0deg)" },
+                    ], {
+                        easing: "ease-in-out",
+                        duration : 800,
+                        iterations: 5
+                    })
+                },1)
+
+                replyid = replyto.getAttribute("id")
+                // this is kind of disgusting but i'm sure its fine?
+                name = chatmain.getElementsByTagName("p")[0].innerText.match(/<([^>]+)>/)[1] // i'll learn regex one day..
+                text+=" (replying to "+name+")"
+            }
+        }
+
         console.log(Profile)
-        let message = new Message(Profile.name, Profile.icon, text, MessageType.CHAT)
+        let message = new Message(Profile.name, Profile.icon, text, MessageType.CHAT,replyid)
         
         const response = await fetch(CHATROOM_ENDPOINT + "/send", {
             method: "POST",

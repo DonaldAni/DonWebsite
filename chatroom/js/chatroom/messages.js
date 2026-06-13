@@ -14,10 +14,11 @@ export const MessageType = Object.freeze({
 })
 
 export class Message {
-    constructor(name, icon, content, type) {
+    constructor(name, icon, content, type,replyid=null) {
         this.name = name
         this.content = content
         this.icon = icon
+        this.replyid = replyid
 
         this.type = type
         
