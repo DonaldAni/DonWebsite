@@ -60,7 +60,7 @@ socket.onmessage = function(payload) {
     payload = JSON.parse(payload.data)
 
     ChatState.lastsuccessfulping = Date.now()
-    
+
     switch(payload.event) {
         case "chat":
             let message = payload.message
@@ -242,7 +242,7 @@ async function init() {
 init()
 
 function checkfordisconnect() {
-    let diff = Date.now() - lastpinged
+    let diff = Date.now() - ChatState.lastsuccessfulping
     if(diff > TIMEOUT_THRESHOLD) {
         console.log("disconnecting because of failed ping: " + diff)
         alert("Lost connection to chatroom server, refresh the tab?")
