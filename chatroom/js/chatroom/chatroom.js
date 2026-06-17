@@ -54,12 +54,12 @@ const socket = new WebSocket(
 //     socket.send(JSON.stringify(payload))
 // }
 
-let lastpinged = Date.now()
 socket.onmessage = function(payload) {
     let raw = payload
     payload = JSON.parse(payload.data)
 
     ChatState.lastsuccessfulping = Date.now()
+    console.log(ChatState.lastsuccessfulping, payload)
 
     switch(payload.event) {
         case "chat":
@@ -103,8 +103,6 @@ socket.onmessage = function(payload) {
             socket.send(JSON.stringify({
                 event: "pong"
             }))
-
-            lastpinged = Date.now()
         break
     }
 }

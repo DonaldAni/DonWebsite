@@ -47,8 +47,14 @@ export default {
     set loadedinitialmessages(val) {
         loadedinitialmessages = val
     },
+    get lastsuccessfulping() {
+        return lastsuccessfulping
+    },
+    set lastsuccessfulping(val) {
+        lastsuccessfulping = val
+    },
     
-    lastsuccessfulping,
+
     outgoingmessages,
 
     disconnect,
