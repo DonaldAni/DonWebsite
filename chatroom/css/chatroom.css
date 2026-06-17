@@ -118,6 +118,7 @@ h1 {
 }
 .chatmain.me {
     justify-content: center;
+    font-style: italic;
 }
 
 .chatside {

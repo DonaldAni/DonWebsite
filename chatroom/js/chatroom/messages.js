@@ -2,6 +2,7 @@ import { formaticonid } from './icons.js'
 import { name } from './profile.js'
 
 import { checkifspecial } from './specialnames.js'
+import { loadedinitialmessages } from './chatstate.js'
 
 function sanitizetextHTMLsafe(text) {
     return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
@@ -14,7 +15,7 @@ export const MessageType = Object.freeze({
 })
 
 export class Message {
-    constructor(name, icon, content, type,replyid=null) {
+    constructor(name, icon, content, type, replyid=null) {
         this.name = name
         this.content = content
         this.icon = icon
@@ -114,9 +115,17 @@ class RenderedMessage {
         }
 
         let toset = sanitizetextHTMLsafe(content)
+        let mentioned = false
         if(this.name) {
             if(this.name !== name) {
-                toset = toset.replaceAll(name, `<span style="color: yellow;">${name}</span>`)
+                let oldtoset = toset
+
+                let regex = new RegExp(name, 'gi')
+                toset = toset.replaceAll(regex, `<span style="color: yellow;">${name}</span>`)
+            
+                if(toset !== oldtoset && loadedinitialmessages) {
+                    sounds.MENTIONED_SOUND.play()
+                }
             }
 
             toset = sanitizetextHTMLsafe(`<${this.name}>`) + ` ${toset}`
@@ -129,10 +138,8 @@ class RenderedMessage {
     }
 
     setcolor(color) {
-        this.element.style = `
-            color: ${color};
-            border-bottom: 1px dashed ${color};
-        `
+        this.element.style.color = color
+        this.element.style.borderBottom = `1px dashed ${color}`
 
         return this
     }
@@ -170,6 +177,20 @@ function rendersystem(messagedata) {
     return rendered
 }
 
+function renderaction(messagedata) {
+    let rendered = 
+        new RenderedMessage()
+            .settime(messagedata.time)
+            .setreplyid(messagedata.replyid) // shouldnt ever come into effect but whateverrrr
+            .setcontent(`* ${messagedata.name} ${messagedata.content} *`)
+            .setname(messagedata.name) // happens after to not add it onto the start of the content
+            .setid(messagedata.id)
+    
+    rendered.chatmain.classList.add("me")
+
+    return rendered
+}
+
 export function rendermessage(message) {
     switch(message.type) {
         case MessageType.CHAT:
@@ -180,12 +201,17 @@ export function rendermessage(message) {
             return rendersystem(message)
         break
 
+        case MessageType.ACTION:
+            return renderaction(message)
+        break
+
         default:
             return renderchat(message)
         break
     }
 }
 import { HISTORY } from './elements.js'
+import sounds from './sounds.js'
 export function doreply(replyid) {
     let replymsg = document.getElementById(replyid)
     setTimeout(function() {

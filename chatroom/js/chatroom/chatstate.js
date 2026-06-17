@@ -9,6 +9,8 @@ export var lastsuccessfulping = Date.now()
 
 export var loadedinitialmessages = false
 
+export const outgoingmessages = []
+
 export function disconnect() {
     connected = false
 
@@ -29,8 +31,6 @@ function settopic(newtopic) {
     
     if(loadedinitialmessages) {
         Sounds.NEW_TOPIC_SOUND.play()
-        
-        sendsystemmessage(topicstr)
     }
 }
 
@@ -41,14 +41,15 @@ export default {
     get connected() {
         return connected
     },
-    
-    lastsuccessfulping,
     get loadedinitialmessages() {
         return loadedinitialmessages
     },
     set loadedinitialmessages(val) {
         loadedinitialmessages = val
     },
+    
+    lastsuccessfulping,
+    outgoingmessages,
 
     disconnect,
     settopic

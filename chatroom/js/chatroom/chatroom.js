@@ -1,7 +1,5 @@
 // constants
-const CHATROOM_ENDPOINT = "https://phil.kayladotcom.org/donchatroom"
-const PING_INTERVAL = 5000
-const TIMEOUT_THRESHOLD = 60*1000
+import { CHATROOM_ENDPOINT, PING_INTERVAL, TIMEOUT_THRESHOLD } from './consts.js'
 
 // sounds
 import * as Sounds from './sounds.js'
@@ -22,19 +20,47 @@ import { getrandomicon, MAX_ICON_ID } from './icons.js'
 
 // message stuff
 import { MessageType, Message, SystemMessage } from './messages.js'
-import { rendermessage, doreply } from './messages.js'
+import Commands from './commands.js'
+import { rendermessage } from './messages.js'
+import { sendmessage } from './network.js'
+
+// load data
+if(savedataexists()) {
+    let data = loadstuff()
+    console.log(data)
+    
+    Profile.setname(data.name)
+    Profile.seticon(data.icon)
+    
+    if(checkifspecial(data.name)) {
+        Profile.usingspecial = true
+    }
+} else {
+    Profile.setname(generaterandomname())
+    Profile.seticon(getrandomicon())
+}
 
 // hooks
 const socket = new WebSocket(
     "wss://phil.kayladotcom.org/donchatroom/ws"
 )
+// socket.onopen = function() {
+//     let payload = {
+//         event: 'join',
 
-let outgoingmessages = []
+//         name: Profile.name
+//     }
+
+//     socket.send(JSON.stringify(payload))
+// }
+
 let lastpinged = Date.now()
 socket.onmessage = function(payload) {
     let raw = payload
     payload = JSON.parse(payload.data)
-    console.log(payload)
+
+    ChatState.lastsuccessfulping = Date.now()
+    
     switch(payload.event) {
         case "chat":
             let message = payload.message
@@ -55,15 +81,15 @@ socket.onmessage = function(payload) {
 
             let curtime = Date.now() / 1000
             let diff = (curtime-message.time) // something about this is super wrong and i dont wanna figure it out right now
-            console.log(diff)
+
             if (message.replyid && diff < 15) {
                 doreply(message.replyid)
             }
 
-            if(!outgoingmessages.includes(message.id)) {
+            if(!ChatState.outgoingmessages.includes(message.id)) {
                 notifsound.play()
             } else {
-                outgoingmessages.splice(outgoingmessages.indexOf(message.id), 1)
+                ChatState.outgoingmessages.splice(ChatState.outgoingmessages.indexOf(message.id), 1)
             }
         break
 
@@ -94,79 +120,21 @@ Elements.CHATBAR.addEventListener('keydown', async (e)=>{
         }
         Elements.CHATBAR.value = ""
 
-        let id = crypto.randomUUID()
-        
-        if(Profile.name.length == 0) {
-            Profile.setname(generaterandomname())
-            savestuff(Profile.name, Profile.icon)
-        }
+        if(!text.startsWith("/")) {
+            // normal message
+            await sendmessage(text, MessageType.CHAT)
+        } else {
+            // command
+            let command = text.slice(1).split(" ")[0]
+            let args = text.slice(1).split(" ").slice(1)
 
-        let replyid = null
-        // ose was here
-        if (text.startsWith("^")) {
-            console.log("hi")
-            let char = text.charAt(0)
-            let i = 0
-            let cancel = false
-            while (char === "^") {
-                if (i > 35) { // too much
-                    cancel = true
-                    break
+            for(const cmd of Commands) {
+                if(cmd.key === command) {
+                    cmd.run(args)
+                    return
                 }
-                i++
-                char = text.charAt(i)
-            }
-            if (!cancel) {
-                let msgs = Elements.HISTORY.querySelectorAll(".chat")
-                let replyto = msgs[msgs.length-i]
-                let chatmain = replyto.getElementsByClassName("chatmain")[0]
-
-                replyid = replyto.getAttribute("id")
-                // this is kind of disgusting but i'm sure its fine?
-                name = chatmain.getElementsByTagName("p")[0].innerText.match(/<([^>]+)>/)[1] // i'll learn regex one day..
-                text+=" (replying to "+name+")"
-
-                doreply(replyid)
-            }
+            } 
         }
-
-        console.log(Profile)
-        let message = new Message(Profile.name, Profile.icon, text, MessageType.CHAT,replyid)
-        outgoingmessages.push(message.id)
-        
-        const response = await fetch(CHATROOM_ENDPOINT + "/send", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(message)
-        })
-
-        if(!response.ok) {
-            switch(response.status) {
-                case 503:
-                    alert("The chatroom service is currently offline")
-                    ChatState.disconnect()
-                    socket.close()
-                break
-
-                case 429:
-                    alert("You are sending messages too quickly")
-                break
-
-                default:
-                    alert("Failed to send message")
-                break
-            }
-            return
-        }
-        
-        // render new message
-        // let rendered = rendermessage(message)
-        // Elements.HISTORY.append(rendered.element)
-        // Elements.HISTORY.scrollTop = Elements.HISTORY.scrollHeight
-
-        Sounds.SEND_SOUND.play()
     }
 })
 
@@ -179,7 +147,6 @@ Elements.NAME_INPUT.addEventListener('input', (e) => {
     if(special) {
         Profile.usingspecial = true
 
-        console.log(special)
         Profile.seticon(special.icon)
     } else {
         Profile.usingspecial = false
@@ -242,7 +209,7 @@ async function pingserver() {
 
             let curtime = Date.now() / 1000
             let diff = (curtime-message.time) // something about this is super wrong and i dont wanna figure it out right now
-            console.log(diff)
+
             if (message.replyid && diff < 15) {
                 doreply(message.replyid)
             }
@@ -254,9 +221,10 @@ async function pingserver() {
 
         ChatState.lastsuccessfulping = Date.now()
     } catch(e) {
-        console.log(e)
+        console.error(e)
         console.log("failed to pign server " + ChatState.lastsuccessfulping)
         if(Date.now() - ChatState.lastsuccessfulping > PING_INTERVAL * 5) {
+            console.log("disconnecting because of failed ping")
             alert("Lost connection to chatroom server, refresh the tab?")
 
             ChatState.disconnect()
@@ -266,22 +234,6 @@ async function pingserver() {
 }
 
 async function init() {
-    // load data
-    if(savedataexists()) {
-        let data = loadstuff()
-        console.log(data)
-
-        Profile.setname(data.name)
-        Profile.seticon(data.icon)
-
-        if(checkifspecial(data.name)) {
-            Profile.usingspecial = true
-        }
-    } else {
-        Profile.setname(generaterandomname())
-        Profile.seticon(getrandomicon())
-    }
-
     // get history
     await pingserver()
     ChatState.loadedinitialmessages = true
@@ -290,7 +242,9 @@ async function init() {
 init()
 
 function checkfordisconnect() {
-    if(Date.now() - lastpinged > TIMEOUT_THRESHOLD) {
+    let diff = Date.now() - lastpinged
+    if(diff > TIMEOUT_THRESHOLD) {
+        console.log("disconnecting because of failed ping: " + diff)
         alert("Lost connection to chatroom server, refresh the tab?")
 
         ChatState.disconnect()
