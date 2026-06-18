@@ -154,6 +154,17 @@ class RenderedMessage {
 
         return this
     }
+
+    addclass(cssclass) {
+        this.element.classList.add(cssclass)
+
+        return this
+    }
+    removeclass(cssclass) {
+        this.element.classList.remove(cssclass)
+
+        return this
+    }
 }
 
 function renderchat(messagedata) {
@@ -212,6 +223,13 @@ export function rendermessage(message) {
 }
 import { HISTORY } from './elements.js'
 import sounds from './sounds.js'
+
+export function addrenderedmessage(renderedmessage) {
+    HISTORY.append(renderedmessage.element)
+
+    HISTORY.scrollTop = HISTORY.scrollHeight
+}
+
 export function doreply(replyid) {
     let replymsg = document.getElementById(replyid)
     setTimeout(function() {

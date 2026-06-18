@@ -28,10 +28,6 @@ function settopic(newtopic) {
     
     let topicstr = `CHAT TOPIC: ${newtopic}`
     TOPIC_DISPLAY.textContent = topicstr
-    
-    if(loadedinitialmessages) {
-        Sounds.NEW_TOPIC_SOUND.play()
-    }
 }
 
 export default {

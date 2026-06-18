@@ -21,7 +21,7 @@ import { getrandomicon, MAX_ICON_ID } from './icons.js'
 // message stuff
 import { MessageType, Message, SystemMessage } from './messages.js'
 import Commands from './commands.js'
-import { rendermessage } from './messages.js'
+import { rendermessage, addrenderedmessage } from './messages.js'
 import { sendmessage } from './network.js'
 
 // load data
@@ -66,17 +66,24 @@ socket.onmessage = function(payload) {
             let message = payload.message
 
             if(document.getElementById(message.id)) {
+                if(ChatState.outgoingmessages.includes(message.id)) {
+                    // remove outgoing tag
+                    let rendered = document.getElementById(message.id)
+                    rendered.classList.remove("outgoing")
+                }
+
                 return
             }
 
-            let rendered = rendermessage(message)
-            Elements.HISTORY.append(rendered.element)
-            Elements.HISTORY.scrollTop = Elements.HISTORY.scrollHeight
+            addrenderedmessage(rendermessage(message))
 
             let notifsound = Sounds.RECIEVE_SOUND
             let special = checkifspecial(message.name)
             if(special) {
                 notifsound = special.getnotifsound()
+            }
+            if(message.system) {
+                notifsound = Sounds.SYSTEM_RECIEVE_SOUND
             }
 
             let curtime = Date.now() / 1000
@@ -192,12 +199,14 @@ async function pingserver() {
             }
 
             addednew = true
-            let rendered = rendermessage(message)
-            Elements.HISTORY.append(rendered.element)
-            Elements.HISTORY.scrollTop = Elements.HISTORY.scrollHeight
+            addrenderedmessage(rendermessage(message))
+
+            if(message.system) {
+                notifsoundtoplay = Sounds.SYSTEM_RECIEVE_SOUND
+            }
 
             let special = checkifspecial(message.name)
-            if(special) {
+            if(special && notifsoundtoplay !== Sounds.SYSTEM_RECIEVE_SOUND) {
                 let thisnotifsound = special.getnotifsound()
 
                 if(thisnotifsound !== Sounds.RECIEVE_SOUND) {

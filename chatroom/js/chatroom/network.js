@@ -4,7 +4,7 @@ import Profile from "./profile.js"
 import * as Elements from './elements.js'
 import Sounds from "./sounds.js"
 
-import { Message } from "./messages.js"
+import { Message, rendermessage, addrenderedmessage } from "./messages.js"
 import { outgoingmessages } from "./chatstate.js"
 
 import { savestuff } from "./save.js"
@@ -48,6 +48,11 @@ export async function sendmessage(content, type) {
     
     console.log(Profile)
     let message = new Message(Profile.name, Profile.icon, content, type, replyid)
+    
+    let rendered = rendermessage(message)
+                    .addclass("outgoing")
+
+    addrenderedmessage(rendered)
     outgoingmessages.push(message.id)
     
     const response = await fetch(CHATROOM_ENDPOINT + "/send", {
@@ -76,11 +81,6 @@ export async function sendmessage(content, type) {
         }
         return
     }
-    
-    // render new message
-    // let rendered = rendermessage(message)
-    // Elements.HISTORY.append(rendered.element)
-    // Elements.HISTORY.scrollTop = Elements.HISTORY.scrollHeight
     
     Sounds.SEND_SOUND.play()
 }

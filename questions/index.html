@@ -54,7 +54,7 @@
 <script src="/shared/js/topbar.js"></script>
 <script>
     const ANSWERED = document.getElementById("answered")
-    const TOGET = "https://phil.kayladotcom.org/askdon"
+    const TOGET = "https://donaldapi.kayladotcom.org/ask"
 
     async function getquestions() {
         await fetch(TOGET).then((data) => data.json()).then((data) => {
