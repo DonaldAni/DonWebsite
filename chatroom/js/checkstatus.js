@@ -1,5 +1,5 @@
 // get the status of the chatroom
-let ENDPOINT = "https://phil.kayladotcom.org/donchatroom"
+let ENDPOINT = "https://donaldapi.kayladotcom.org/chatroom"
 let chatroomroot = document.getElementById("chatroomroot")
 
 function checkstatus() {

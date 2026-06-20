@@ -4,6 +4,9 @@ import { name } from './profile.js'
 import { checkifspecial } from './specialnames.js'
 import { loadedinitialmessages } from './chatstate.js'
 
+import ChatState from './chatstate.js'
+import Sounds from './sounds.js'
+
 function sanitizetextHTMLsafe(text) {
     return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
 }
@@ -261,11 +264,47 @@ export function doreply(replyid) {
 
 }
 
-
 export function sendsystemmessage(content) {
     let message = new SystemMessage(content)
     let rendered = rendermessage(message)
 
     HISTORY.append(rendered.element)
     HISTORY.scrollTop = HISTORY.scrollHeight
+}
+
+export function loadhistory(arr) {
+    let addednew = false
+    let notifsoundtoplay = Sounds.RECIEVE_SOUND
+    for(const message of arr) {
+        if(document.getElementById(message.id)) {
+            continue
+        }
+        
+        addednew = true
+        addrenderedmessage(rendermessage(message))
+        
+        if(message.system) {
+            notifsoundtoplay = Sounds.SYSTEM_RECIEVE_SOUND
+        }
+        
+        let special = checkifspecial(message.name)
+        if(special && notifsoundtoplay !== Sounds.SYSTEM_RECIEVE_SOUND) {
+            let thisnotifsound = special.getnotifsound()
+            
+            if(thisnotifsound !== Sounds.RECIEVE_SOUND) {
+                notifsoundtoplay = thisnotifsound // will play the last special notif sound if one exists
+            }
+        }
+        
+        let curtime = Date.now() / 1000
+        let diff = (curtime-message.time) // something about this is super wrong and i dont wanna figure it out right now
+        
+        if (message.replyid && diff < 15) {
+            doreply(message.replyid)
+        }
+    }
+    
+    if(addednew && ChatState.loadedinitialmessages) {
+        notifsoundtoplay.play()
+    }
 }

@@ -15,8 +15,28 @@ h1 {
     font-family: monospace;
 }
 
+ul {
+    display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+}
+
 #topbaricons {
     filter: hue-rotate(90deg)
+}
+
+#onlineroot {
+    position: absolute;
+        left: 2vw;
+        right: 86vw;
+        top: 20vh;
+        bottom: 20vh;
+
+    border: 2px solid lime;
+
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #chatroomroot {

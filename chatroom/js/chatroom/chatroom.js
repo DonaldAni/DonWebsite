@@ -1,5 +1,5 @@
 // constants
-import { CHATROOM_ENDPOINT, PING_INTERVAL, TIMEOUT_THRESHOLD } from './consts.js'
+import { WEBSOCKET_ENDPOINT, CHATROOM_ENDPOINT, PING_INTERVAL, TIMEOUT_THRESHOLD } from './consts.js'
 
 // sounds
 import * as Sounds from './sounds.js'
@@ -22,7 +22,7 @@ import { getrandomicon, MAX_ICON_ID } from './icons.js'
 import { MessageType, Message, SystemMessage } from './messages.js'
 import Commands from './commands.js'
 import { rendermessage, addrenderedmessage } from './messages.js'
-import { sendmessage } from './network.js'
+import { sendmessage, updateserverprofile, socket } from './network.js'
 
 // load data
 if(savedataexists()) {
@@ -41,79 +41,6 @@ if(savedataexists()) {
 }
 
 // hooks
-const socket = new WebSocket(
-    "wss://phil.kayladotcom.org/donchatroom/ws"
-)
-// socket.onopen = function() {
-//     let payload = {
-//         event: 'join',
-
-//         name: Profile.name
-//     }
-
-//     socket.send(JSON.stringify(payload))
-// }
-
-socket.onmessage = function(payload) {
-    let raw = payload
-    payload = JSON.parse(payload.data)
-
-    ChatState.lastsuccessfulping = Date.now()
-    console.log(ChatState.lastsuccessfulping, payload)
-
-    switch(payload.event) {
-        case "chat":
-            let message = payload.message
-
-            if(document.getElementById(message.id)) {
-                if(ChatState.outgoingmessages.includes(message.id)) {
-                    // remove outgoing tag
-                    let rendered = document.getElementById(message.id)
-                    rendered.classList.remove("outgoing")
-                }
-
-                return
-            }
-
-            addrenderedmessage(rendermessage(message))
-
-            let notifsound = Sounds.RECIEVE_SOUND
-            let special = checkifspecial(message.name)
-            if(special) {
-                notifsound = special.getnotifsound()
-            }
-            if(message.system) {
-                notifsound = Sounds.SYSTEM_RECIEVE_SOUND
-            }
-
-            let curtime = Date.now() / 1000
-            let diff = (curtime-message.time) // something about this is super wrong and i dont wanna figure it out right now
-
-            if (message.replyid && diff < 15) {
-                doreply(message.replyid)
-            }
-
-            if(!ChatState.outgoingmessages.includes(message.id)) {
-                notifsound.play()
-            } else {
-                ChatState.outgoingmessages.splice(ChatState.outgoingmessages.indexOf(message.id), 1)
-            }
-        break
-
-        case "newtopic":
-            if(payload.topic !== ChatState.knowntopic) {
-                ChatState.settopic(payload.topic)
-            }
-        break
-
-        case "ping":
-            socket.send(JSON.stringify({
-                event: "pong"
-            }))
-        break
-    }
-}
-
 Elements.CHATBAR.addEventListener('keydown', async (e)=>{
     if(ChatState.connected && e.key === "Enter") {
         e.preventDefault()
@@ -162,6 +89,7 @@ Elements.NAME_INPUT.addEventListener('input', (e) => {
     }
 
     savestuff(Profile.name, Profile.icon)
+    updateserverprofile(Profile.name, Profile.icon)
 })
 
 Elements.ICON_SELECT.addEventListener("click", () => {
@@ -172,81 +100,8 @@ Elements.ICON_SELECT.addEventListener("click", () => {
     Elements.ICON_IMG.src = formaticonid(icon)
 
     savestuff(Profile.name, Profile.icon)
+    updateserverprofile(Profile.name, Profile.icon)
 })
-
-// main heartbeat loop
-async function pingserver() {
-    try {
-        const response = await fetch(CHATROOM_ENDPOINT + "/messages")
-
-        if(!response.ok) {
-            throw new Error("Network response was not ok")
-        }
-
-        const json = await response.json()
-        const messages = json.messages
-        const topic = json.topic
-
-        if(topic !== ChatState.knowntopic) {
-            ChatState.settopic(topic)
-        }
-
-        let addednew = false
-        let notifsoundtoplay = Sounds.RECIEVE_SOUND
-        for(const message of messages) {
-            if(document.getElementById(message.id)) {
-                continue
-            }
-
-            addednew = true
-            addrenderedmessage(rendermessage(message))
-
-            if(message.system) {
-                notifsoundtoplay = Sounds.SYSTEM_RECIEVE_SOUND
-            }
-
-            let special = checkifspecial(message.name)
-            if(special && notifsoundtoplay !== Sounds.SYSTEM_RECIEVE_SOUND) {
-                let thisnotifsound = special.getnotifsound()
-
-                if(thisnotifsound !== Sounds.RECIEVE_SOUND) {
-                    notifsoundtoplay = thisnotifsound // will play the last special notif sound if one exists
-                }
-            }
-
-            let curtime = Date.now() / 1000
-            let diff = (curtime-message.time) // something about this is super wrong and i dont wanna figure it out right now
-
-            if (message.replyid && diff < 15) {
-                doreply(message.replyid)
-            }
-        }
-
-        if(addednew && ChatState.loadedinitialmessages) {
-            notifsoundtoplay.play()
-        }
-
-        ChatState.lastsuccessfulping = Date.now()
-    } catch(e) {
-        console.error(e)
-        console.log("failed to pign server " + ChatState.lastsuccessfulping)
-        if(Date.now() - ChatState.lastsuccessfulping > PING_INTERVAL * 5) {
-            console.log("disconnecting because of failed ping")
-            alert("Lost connection to chatroom server, refresh the tab?")
-
-            ChatState.disconnect()
-            socket.close()
-        }
-    }
-}
-
-async function init() {
-    // get history
-    await pingserver()
-    ChatState.loadedinitialmessages = true
-}
- 
-init()
 
 function checkfordisconnect() {
     let diff = Date.now() - ChatState.lastsuccessfulping
@@ -263,3 +118,13 @@ function checkfordisconnect() {
     }
 }
 checkfordisconnect()
+
+// wait for the socket to finish connecting
+socket.addEventListener('open', () => {
+    socket.send(JSON.stringify({
+        event: "join",
+
+        name: Profile.name,
+        icon: Profile.icon
+    }))
+})
