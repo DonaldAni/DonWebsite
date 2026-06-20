@@ -1,0 +1,29 @@
+@import "/shared/css/fonts.css";
+
+body {
+    background-image: url("img/artchanaaaaaaa.jpg");
+
+    font-family: 'kiwi soda';
+    color: white;
+}
+
+#alyanna {
+    position: fixed;
+        top: 0;
+        right: 0;
+        
+    height: 115vh;
+}
+
+#root {
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(5px);
+    
+    position: fixed;
+        left: 5vw;
+        right: 65vw;
+        top: 20vh;
+        bottom: 20vh;
+
+    padding: 1%;
+}

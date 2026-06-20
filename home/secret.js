@@ -1,9 +1,3 @@
-const secrets = {
-    "cGlhbm8=": "L3BpYW5v",
-    "Y2xpcG9mdGhld2Vlaw==": "L2NsaXBvZnRoZXdlZWs=",
-    "Yml0": "L2JpdA=="
-}
-
 secretpanel = document.getElementById("slideup")
 secretinput = document.getElementById("secretinput")
 secretbutton = document.getElementById("secretbutton")
@@ -30,44 +24,51 @@ secretpanel.addEventListener("mouseleave", () => {
 })
 
 secretsfound = document.getElementById("secretsfound")
-var seensofar = window.localStorage.getItem("seensecrets")
-if(seensofar === null) seensofar = ""
-        
-var split = seensofar.split(",")
-split.pop()
-console.log(split)
 
-for(seen of split) {
+var seensofar = window.localStorage.getItem("secrets")
+if(seensofar === null) seensofar = "[]"
+        
+var parsed = JSON.parse(seensofar)
+console.log(parsed)
+
+for(seen of parsed) {
     let li = document.createElement("li")
     let a = document.createElement("a")
-    a.href = atob(secrets[seen])
-    a.innerHTML = atob(seen)
+    a.href = seen.target
+    a.innerHTML = seen.key
 
     li.appendChild(a)
     secretsfound.appendChild(li)
 }
 
 
-secretbutton.addEventListener("click", () => {
-    var input = btoa(secretinput.value)
+secretbutton.addEventListener("click", async () => {
+    var input = secretinput.value
 
-    if(input in secrets) {
-        console.log(input)
+    var res = await fetch(`https://donaldapi.kayladotcom.org/verifysecret/${input}`)
+    res = await res.json()
 
-        var seensofar = window.localStorage.getItem("seensecrets")
-        if(seensofar === null) seensofar = ""
+    if(res.valid) {
+        var seensofar = window.localStorage.getItem("secrets")
+        if(seensofar === null) seensofar = "[]"
         
-        var split = seensofar.split(",")
-        split.pop()
+        var parsed = JSON.parse(seensofar)
+        var found = false
 
-        if(!split.includes(input)) {
+        for(seen of parsed) {
+            if(seen.key == input) {
+                found = true
+                break
+            }
+        }
+        if(!found) {
             console.log("thats a new one")
-            seensofar += `${input},`
+            parsed.push({key: input, target: res.result})
 
-            window.localStorage.setItem("seensecrets", seensofar)
+            window.localStorage.setItem("secrets", JSON.stringify(parsed))
         }
 
-        window.location.href = atob(secrets[input])
+        window.location.href = res.result
     } else {
         erraudio.currentTime = 0
         erraudio.play()
