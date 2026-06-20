@@ -9,6 +9,8 @@ export var lastsuccessfulping = Date.now()
 
 export var loadedinitialmessages = false
 
+export const outgoingmessages = []
+
 export function disconnect() {
     connected = false
 
@@ -26,12 +28,6 @@ function settopic(newtopic) {
     
     let topicstr = `CHAT TOPIC: ${newtopic}`
     TOPIC_DISPLAY.textContent = topicstr
-    
-    if(loadedinitialmessages) {
-        Sounds.NEW_TOPIC_SOUND.play()
-        
-        sendsystemmessage(topicstr)
-    }
 }
 
 export default {
@@ -41,9 +37,21 @@ export default {
     get connected() {
         return connected
     },
+    get loadedinitialmessages() {
+        return loadedinitialmessages
+    },
+    set loadedinitialmessages(val) {
+        loadedinitialmessages = val
+    },
+    get lastsuccessfulping() {
+        return lastsuccessfulping
+    },
+    set lastsuccessfulping(val) {
+        lastsuccessfulping = val
+    },
     
-    lastsuccessfulping,
-    loadedinitialmessages,
+
+    outgoingmessages,
 
     disconnect,
     settopic

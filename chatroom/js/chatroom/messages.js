@@ -2,6 +2,7 @@ import { formaticonid } from './icons.js'
 import { name } from './profile.js'
 
 import { checkifspecial } from './specialnames.js'
+import { loadedinitialmessages } from './chatstate.js'
 
 function sanitizetextHTMLsafe(text) {
     return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
@@ -14,10 +15,11 @@ export const MessageType = Object.freeze({
 })
 
 export class Message {
-    constructor(name, icon, content, type) {
+    constructor(name, icon, content, type, replyid=null) {
         this.name = name
         this.content = content
         this.icon = icon
+        this.replyid = replyid
 
         this.type = type
         
@@ -33,12 +35,9 @@ export class Message {
 }
 export class SystemMessage extends Message {
     constructor(content) {
-        super(MessageType.SYSTEM, content)
+        super('SYSTEM', 'phil', content, MessageType.SYSTEM)
         
         this.system = true
-        
-        this.name = 'SYSTEM'
-        this.icon = 'phil'
     }
 }
 
@@ -80,6 +79,7 @@ class RenderedMessage {
             datep.className = 'time'
 
         let date = new Date(time * 1000)
+        this.time = date.getTime()
 
         timep.textContent = date.toLocaleTimeString('en-US', {
             hour: '2-digit',
@@ -97,6 +97,12 @@ class RenderedMessage {
         return this
     }
 
+    setreplyid(replyid) {
+        this.replyid = replyid
+
+        return this
+    }
+
     setcontent(content) {
         let text
         
@@ -109,9 +115,17 @@ class RenderedMessage {
         }
 
         let toset = sanitizetextHTMLsafe(content)
+        let mentioned = false
         if(this.name) {
             if(this.name !== name) {
-                toset = toset.replaceAll(name, `<span style="color: yellow;">${name}</span>`)
+                let oldtoset = toset
+
+                let regex = new RegExp(name, 'gi')
+                toset = toset.replaceAll(regex, `<span style="color: yellow;">${name}</span>`)
+            
+                if(toset !== oldtoset && loadedinitialmessages) {
+                    sounds.MENTIONED_SOUND.play()
+                }
             }
 
             toset = sanitizetextHTMLsafe(`<${this.name}>`) + ` ${toset}`
@@ -124,10 +138,10 @@ class RenderedMessage {
     }
 
     setcolor(color) {
-        this.element.style = `
-            color: ${color};
-            border-bottom: 1px dashed ${color};
-        `
+        this.element.style.color = color
+        this.element.style.borderBottom = `1px dashed ${color}`
+
+        return this
     }
 
     setname(name) {
@@ -140,16 +154,28 @@ class RenderedMessage {
 
         return this
     }
+
+    addclass(cssclass) {
+        this.element.classList.add(cssclass)
+
+        return this
+    }
+    removeclass(cssclass) {
+        this.element.classList.remove(cssclass)
+
+        return this
+    }
 }
 
 function renderchat(messagedata) {
     let rendered = 
         new RenderedMessage()
             .setname(messagedata.name)
+            .settime(messagedata.time)
+            .setreplyid(messagedata.replyid)
             .setcontent(messagedata.content)
             .addicon(messagedata.icon)
             .setid(messagedata.id)
-            .settime(messagedata.time)
     
     return rendered
 }
@@ -158,6 +184,22 @@ function rendersystem(messagedata) {
     let rendered = 
         renderchat(messagedata)
             .setcolor('#FF3FEE')
+
+    return rendered
+}
+
+function renderaction(messagedata) {
+    let rendered = 
+        new RenderedMessage()
+            .settime(messagedata.time)
+            .setreplyid(messagedata.replyid) // shouldnt ever come into effect but whateverrrr
+            .setcontent(`* ${messagedata.name} ${messagedata.content} *`)
+            .setname(messagedata.name) // happens after to not add it onto the start of the content
+            .setid(messagedata.id)
+    
+    rendered.chatmain.classList.add("me")
+
+    return rendered
 }
 
 export function rendermessage(message) {
@@ -170,13 +212,60 @@ export function rendermessage(message) {
             return rendersystem(message)
         break
 
+        case MessageType.ACTION:
+            return renderaction(message)
+        break
+
         default:
             return renderchat(message)
         break
     }
 }
+import { HISTORY } from './elements.js'
+import sounds from './sounds.js'
+
+export function addrenderedmessage(renderedmessage) {
+    HISTORY.append(renderedmessage.element)
+
+    HISTORY.scrollTop = HISTORY.scrollHeight
+}
+
+export function doreply(replyid) {
+    let replymsg = document.getElementById(replyid)
+    setTimeout(function() {
+        replymsg.getElementsByTagName("p")[0].animate([
+            { 
+                color: "yellow",
+            },
+            { 
+                color: window.getComputedStyle(replymsg).getPropertyValue("color"),
+            }
+        ], {
+            duration : 800,
+            iterations: 5
+        })
+
+        replymsg.getElementsByTagName("p")[0].animate([
+            { transform: "rotate(0deg)" },
+            { transform: "rotate(-1deg)" },
+            { transform: "rotate(1deg)" },
+            { transform: "rotate(-1deg)" },
+            { transform: "rotate(1deg)" },
+            { transform: "rotate(0deg)" },
+        ], {
+            easing: "ease-in-out",
+            duration : 800,
+            iterations: 5
+        })
+    },1)
+
+}
+
 
 export function sendsystemmessage(content) {
     let message = new SystemMessage(content)
-    return rendermessage(message)
+    let rendered = rendermessage(message)
+
+    HISTORY.append(rendered.element)
+    HISTORY.scrollTop = HISTORY.scrollHeight
 }

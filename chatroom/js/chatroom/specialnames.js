@@ -31,7 +31,11 @@ export const namemap = {
     "donaldani": new SpecialName('#ff7700', 'donaldrecieve'), // this is -1
     "ms_kaylaa": new SpecialName('#ff72c0', 'kaylarecieve'), // this is -2
     "ukubabe": new SpecialName('#575799', 'ukurecieve'), // this is -3
-    "paint": new SpecialName('#1c2dc5', 'paintrecieve') // etc
+    "paint": new SpecialName('#1c2dc5', 'paintrecieve'), // etc
+    "hexose": new SpecialName('#9817d4', 'hexoserecieve'), // etc
+    "sans": new SpecialName('#3a3cc0', 'sansrecieve'), // etc
+    "astranova": new SpecialName('#be24d3', 'astranovarecieve'), // etc
+    "2011x": new SpecialName('#d81010', '2011recieve') // etc
 }
 
 export function checkifspecial(name) {
