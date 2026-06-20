@@ -101,7 +101,10 @@
                     divider.style.margin = 0
                     divider.innerHTML = "---"
                 qdiv.append(divider)
-                qdiv.append(answered.answer)
+
+                let p = document.createElement("p")
+                p.innerHTML = answered.answer
+                qdiv.append(p)
                 
                 li.appendChild(qdiv)
                 ul.appendChild(li)

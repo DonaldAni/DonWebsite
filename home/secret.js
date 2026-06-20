@@ -1,6 +1,7 @@
 const secrets = {
     "cGlhbm8=": "L3BpYW5v",
-    "Y2xpcG9mdGhld2Vlaw==": "L2NsaXBvZnRoZXdlZWs="
+    "Y2xpcG9mdGhld2Vlaw==": "L2NsaXBvZnRoZXdlZWs=",
+    "Yml0": "L2JpdA=="
 }
 
 secretpanel = document.getElementById("slideup")
