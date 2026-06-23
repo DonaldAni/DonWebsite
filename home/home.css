@@ -26,6 +26,11 @@ img.kaylabutton {
 img.kaylabutton:hover {
     transform: scale(1.1,1.1)
 }
+img.kaylabutton {
+  width: 469px;
+  height: 400px;
+}
+/* i just wanna make it known, this proccess was terrible and i wish i could just use html LOL */
 
 .slideup {
     transition: transform 0.1s cubic-bezier(0.165, 0.84, 0.44, 1);
