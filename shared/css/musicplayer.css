@@ -1,0 +1,132 @@
+#musicplayerroot {
+    position: fixed;
+        top: calc(100vh - 30px);
+        left: 10vw;
+
+    width: 250px;
+    height: 400px;
+    background-color: orangered;
+
+    border: 4px solid black;
+
+    transition: transform 0.1s ease;
+
+    z-index: 9999;
+
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+#musicplayerroot:hover {
+    transform: translateY(-370px);
+}
+
+#mptabber {
+    width: 100%;
+    height: 30px;
+
+    display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+    cursor: default;
+}
+#mpnowplaying {
+    font-size: 100%;
+    margin: 0;
+    color: white;
+    text-shadow: none;
+}
+
+#mpsonglist {
+    width: 100%;
+    height: calc(100% - 90px - 15px);
+
+    background-color: rgb(31, 25, 23);
+
+    border-top: 4px solid rgb(14, 9, 7);
+    box-sizing: border-box;
+
+    text-align: center;
+}
+#mptimecontainer {
+    width: 100%;
+    height: 10px;
+
+    background-color: rgb(31, 25, 23);
+    color: gray;
+
+    text-shadow: none;
+    font-size: 75%;
+
+    display: flex;
+        align-items: center;
+        justify-content: center;
+
+    text-align: center;
+}
+#mpplayheadback {
+    width: 100%;
+    height: 5px;
+
+    background-color: rgb(15, 6, 6);
+}
+#mpplaybar {
+    width: 50%;
+    height: 5px;
+
+    background-color: rgb(255, 168, 86);
+}
+#mpplayhead {
+    width: 10px;
+    height:10px;
+
+    background-color: rgb(255, 168, 86);
+
+    position:relative;
+        left: calc(100% - 5px);
+        right: calc(100% + 5px);
+        top: calc(50% - 5px);
+        bottom: calc(50% + 5px);
+
+    border-radius: 100%;
+}
+
+.mpcurrentlyplaying {
+    color: yellow;
+    text-shadow: none;
+}
+.mpnotplaying {
+    color: gray;
+    text-shadow: none;
+}
+
+#mpcontrols {
+    display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+
+    width: 100%;
+    height: 60px;
+}
+
+#mpcontrols > hr {
+    width: 0;
+    height: 60%;
+    
+    border: 1px solid rgb(31, 25, 23);
+}
+
+.mpcontrol {
+    width: 20%;
+    transition: none;
+}
+.mpcontrol:hover {
+    cursor: pointer;
+    filter: brightness(0.65);
+    transition: filter 0.1s ease;
+}
+.mpcontrol:active {
+    filter: brightness(0.325);
+    transition: none;
+}
