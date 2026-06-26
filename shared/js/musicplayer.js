@@ -1,3 +1,5 @@
+const SAVE_KEY = "musicplayeridx"
+
 // player vars
 let playing = false
 let thinking = true
@@ -21,6 +23,8 @@ audio.addEventListener('loadedmetadata', function() {
     audiolength = audio.duration
     console.log(audiolength)
 })
+
+let failaudio = new Audio(getaudiosource("sfx/snd_failure2.mp3"))
 
 // utils
 function idxtosongkey(idx) {
@@ -175,6 +179,7 @@ function setsong(idx, autoplay=true) {
     durationstringified = ""
 
     playingidx = idx
+    localStorage.setItem(SAVE_KEY, playingidx.toString())
     regensonglist()
 
     audio.src = getaudiosource(queue[idxtosongkey(idx)])
@@ -185,7 +190,16 @@ function setsong(idx, autoplay=true) {
         }
     }, {once: true})
 }
-setsong(0, false)
+let toset = 0
+let loaded = localStorage.getItem(SAVE_KEY)
+console.log(loaded)
+if(loaded !== null) {
+    toset = parseInt(loaded)
+    if(isNaN(toset)) {
+        toset = 0
+    }
+}
+setsong(toset, false)
 
 // hooks
 skipback.addEventListener('click', function() {
@@ -197,6 +211,10 @@ skipback.addEventListener('click', function() {
     setsong(skippingto)
 })
 playbutton.addEventListener('click', function() {
+    if(thinking) {
+        failaudio.play()
+        return
+    }
     if(playing) {
         pauseaudio()
     } else {
