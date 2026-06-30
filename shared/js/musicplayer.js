@@ -8,8 +8,11 @@ let thinking = true
 // this wont get shuffled or anything but it WILL remember which song was last playing
 let playingidx = 0
 let queue = {
-    "test1": "microsoft office.mp3",
-    "test2": "microsoft office.mp3"
+    "ill be missing u": "ill be missing you.ogg",
+    "virtual insanity": "virtual insanity.ogg",
+    "sans.": "sans. (dark world).ogg",
+    "future diary": "Kuusou Mesorogiwi.ogg",
+    "dont.come.back": "dont come back.ogg"
 }
 
 let audiolength = NaN
