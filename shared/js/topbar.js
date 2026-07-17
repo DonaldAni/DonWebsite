@@ -56,8 +56,8 @@ let canpick = [
     "fart mode: TRUE",
     "poop mode: ON",
     "<a target=\'_blank\' href=\'https://phil.kayladotcom.org/getfile/sapsucker%20rays\'>click me</a>",
-    '<span style="color: rgb(255, 113, 160)">i have hacked donald\'s website. do not resist me. -kayla</span>',
-    '<span style="color: rgb(255, 113, 160)">' +
+    '<span style="color: rgb(255, 91, 159)">i have hacked donald\'s website. do not resist me. -kayla</span>',
+    '<span style="color: rgb(255, 91, 159)">' +
         "okay, look. it's me again. listen, i got into some pretty hot water here. long story short, do you have $200,000 dollars that i can borrow? -kayla" +
         '</span>',
     ":-)",
