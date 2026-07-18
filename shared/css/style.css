@@ -3,6 +3,7 @@
 } */
 
 @import "fonts.css";
+@import "ads.css";
 
 html {
     /* filter: hue-rotate(-20deg); */ /* its not spring anymore. */
@@ -56,44 +57,4 @@ hr {
     /* makes the horizontal line a bit shorter */
     width: 60%;
     color: black;
-}
-
-/* ad stuff */
-.addivvertleft {
-    position: fixed;
-        left: 0;
-        right: 85vw;
-        top: 0;
-        bottom: 0;
-
-    display: flex;
-        align-items: center;
-        justify-content: center;
-}
-.addivvertright {
-    position: fixed;
-        left: 85vw;
-        right: 0;
-        top: 0;
-        bottom: 0;
-
-    display: flex;
-        align-items: center;
-        justify-content: center;
-}
-/* only bottom for horizontal */
-.addivhori { 
-    position: fixed;
-        left: 0;
-        right: 0;
-        top: 85vh;
-        bottom: 0;
-
-    display: flex;
-        align-items: center;
-        justify-content: center;
-}
-
-phil-ad {
-    filter: drop-shadow(4px 4px 8px black)
 }
