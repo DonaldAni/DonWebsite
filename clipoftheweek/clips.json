@@ -1,0 +1,36 @@
+{
+    "surprise.mp4": {
+        "thumbnail": "placeholder.png",
+        "week": "7/12/26",
+        "title": "surprise!",
+        "description": "sometimes you gotta do what you gotta do. i don't think i had to do that though. sorry paint",
+
+        "tags": [
+            "kayla"
+        ]
+    },
+    "paint wait.mp4": {
+        "thumbnail": "placeholder.png",
+        "week": "6/29/26",
+        "title": "paint wai",
+        "description": "i look away for a second and this guy is already gone"
+    },
+    "no excuses.mp4": {
+        "thumbnail": "placeholder.png",
+        "week": "6/21/26",
+        "title": "I have no excuses",
+        "description": "No really i have no idea how i didnt realize it was a mine, it was red and glowing and everything"
+    },
+    "homer.mp4": {
+        "thumbnail": "placeholder.png",
+        "week": "6/15/26",
+        "title": "Homer.. is That You?",
+        "description": "was in vc with <a href=\"https://www.youtube.com/@astranovayt\">Astranova</a> when this happened, a cool va guy showed up, check <a href=\"https://www.youtube.com/@TizzyThePony\">him</a> out!"
+    },
+    "teleporter.mp4": {
+        "thumbnail": "placeholder.png",
+        "week": "5/24/26",
+        "title": "Put Teleporter Here",
+        "description": "kayla, dont ever do this again, i was terrified of not saving 12 seconds of travel."
+    }
+}

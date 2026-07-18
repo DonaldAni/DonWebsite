@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>CLIP OF THE WEEK</title>
+
+        <link rel="stylesheet" href="css/clipoftheweek.css">
+        <link rel="stylesheet" href="css/clip.css">
+        <link rel="icon" type="image/png" href="/shared/img/DarcyIcon.png">
+    </head>
+    <body>
+        <div style="height: 8vh;"></div>
+
+        <h1 id="loading">LOADING...</h1>
+
+        <div id="waitforload">
+            <h1>CLIP OF THE WEEK</h1>
+            <h2>(week of <span id="week">7/12/26</span>)</h2>
+            
+            <hr>
+            <div style="height: 15px"></div>
+
+            <video id="clip" controls>
+                <source id="clipsrc" src="videos/clip.mp4" type="video/mp4">
+            </video>
+            <h2 id="title">title here</h2>
+            <i id="description">description goes here</i>
+
+            <div style="height: 50px"></div>
+            <a href="./"><p id="goback">back to clip list</p></a>
+        </div>
+    </body>
+</html>
+
+<script src="js/clip.js"></script>
+<script src="/shared/js/topbar.js"></script>

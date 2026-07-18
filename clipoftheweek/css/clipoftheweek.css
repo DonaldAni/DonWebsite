@@ -1,0 +1,25 @@
+/* for debug */
+* {
+    /* border: 1px solid red; */
+}
+
+/* setup */
+html {
+    background-color: black;
+    color: white;
+}
+body {
+    display: flex;
+        flex-direction: column;
+}
+
+/* elements */
+h1 {
+    margin-bottom: 0;
+}
+hr {
+    margin-left: 0;
+    width: 80%;
+    
+    border: 1px solid white;
+}

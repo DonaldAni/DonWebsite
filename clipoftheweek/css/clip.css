@@ -1,0 +1,26 @@
+body {
+    text-align: center;
+}
+
+hr {
+    margin: auto;
+
+    width: 70%;
+}
+
+/* classes/ids */
+#clip {
+    height: 30rem;
+    align-self: center;
+
+    border: 2px solid white;
+}
+@media(max-width: 654px) {
+    #clip {
+        width: 80%;
+    }
+}
+
+#waitforload {
+    display: none;
+}
