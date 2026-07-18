@@ -1,4 +1,4 @@
-const UNSEEN_KEY = "unseen_1"
+const UNSEEN_KEY = "unseen"
 function loadunseen() {
     return JSON.parse(localStorage.getItem(UNSEEN_KEY))
 }

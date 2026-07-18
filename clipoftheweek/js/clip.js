@@ -1,12 +1,15 @@
+// loading elements
 const LOADING = document.getElementById("loading")
 const WAIT_FOR_LOAD = document.getElementById("waitforload")
 
+// clip elements
 const WEEK = document.getElementById("week")
 const CLIP = document.getElementById("clip")
 const CLIP_SOURCE = document.getElementById("clipsrc")
 const TITLE = document.getElementById("title")
 const DESCRIPTION = document.getElementById("description")
 
+// tag stuff
 const tageffects = {
     "kayla": () => {
         const color = "#FF5B9F"
@@ -15,7 +18,6 @@ const tageffects = {
         DESCRIPTION.style.color = color
     }
 }
-
 function processtags(tags) {
     for(const tag of tags) {
         let effect = tageffects[tag]
@@ -25,11 +27,13 @@ function processtags(tags) {
     }
 }
 
+// get clip from url
 let rawparams = window.location.search
 let params = new URLSearchParams(rawparams)
 
 let clip = params.get("clip")
 
+// load clip from json
 fetch("clips.json")
     .then(result => result.json())
     .then(data => {

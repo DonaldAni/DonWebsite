@@ -12,7 +12,8 @@ let queue = {
     "virtual insanity": "virtual insanity.ogg",
     "sans.": "sans. (dark world).ogg",
     "future diary": "Kuusou Mesorogiwi.ogg",
-    "dont.come.back": "dont come back.ogg"
+    "dont.come.back": "dont come back.ogg",
+    "a way out": "gm48 title.ogg"
 }
 
 let audiolength = NaN

@@ -25,9 +25,11 @@ video-card {
     padding: 5px;
 
     /* border: 1px solid lime; */
+
+    transition: background-color .065s linear;
 }
 video-card:hover {
-    background-color: rgb(32, 32, 32);
+    background-color: rgb(65, 65, 65);
     cursor: pointer;
 }
 video-card:active {
