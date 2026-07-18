@@ -83,6 +83,15 @@ let canpick = [
     // scary... but still ones i added
     "GMRT? more like ICUP. #OWNED",
     '<span style="color: rgb(255, 113, 160)">i do already have a link on the front page... but like... <a href="https://kayladotcom.org" target="_blank">kayladotcom.org</a>.... -kayla</span>',
+    'home of the go dot diddy masters',
+    'bruh meme',
+    'poop mode: <span style="color: red;">OFF</span>',
+    'press ctrl+p',
+    'ay, <a target="_blank" href="https://donaldapi.kayladotcom.org/philads/submit.html">submit an ad</a>, why dont ya?',
+    'be a pal, <a target="_blank" href="https://donaldapi.kayladotcom.org/philads/implementing.html">support philads</a>',
+    'now with lerping functionality',
+    'would you still love me if i was <span style="color: #93C44D">Made With GameMaker: Studio</span>',
+    'the only portfolio website with an API backend'
 ]
 
 var hoversound = document.createElement("audio")
