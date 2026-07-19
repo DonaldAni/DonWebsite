@@ -1,9 +1,9 @@
-const UNSEEN_KEY = "unseen"
-function loadunseen() {
-    return JSON.parse(localStorage.getItem(UNSEEN_KEY))
+const SEEN_KEY = "seen"
+function loadseen() {
+    return JSON.parse(localStorage.getItem(SEEN_KEY))
 }
-function saveunseen(newdata) {
-    localStorage.setItem(UNSEEN_KEY, JSON.stringify(newdata))
+function saveseen(newdata) {
+    localStorage.setItem(SEEN_KEY, JSON.stringify(newdata))
 }
 
 function getdurationofvideo(filename) {
@@ -111,11 +111,11 @@ class VideoCard extends HTMLElement {
 
         this.appendChild(card)
         this.addEventListener("click", () => {
-            let unseen = loadunseen()
-            if(unseen.includes(this.goesto)) {
-                unseen = unseen.filter(x => x !== this.goesto)
+            let seen = loadseen()
+            if(!seen.includes(this.goesto)) {
+                seen.push(this.goesto)
             }
-            saveunseen(unseen)
+            saveseen(seen)
 
             window.location.href = `clip.html?clip=${this.goesto}`
         })
@@ -127,13 +127,23 @@ customElements.define("video-card", VideoCard)
 fetch("clips.json")
     .then(response => response.json())
     .then(data => {
-        if(!localStorage.getItem(UNSEEN_KEY)) {
-            let newestkey = Object.keys(data)[0]
+        if(!localStorage.getItem(SEEN_KEY)) {
+            let skippedfirst = false
 
-            localStorage.setItem(UNSEEN_KEY, JSON.stringify([newestkey]))
+            let def = []
+            for(const key of Object.keys(data)) {
+                if(!skippedfirst) {
+                    skippedfirst = true
+                    continue
+                }
+
+                def.push(key)
+            }
+
+            localStorage.setItem(SEEN_KEY, JSON.stringify(def))
         }
 
-        let unseen = loadunseen()
+        let seen = loadseen()
 
         for(const clipkey of Object.keys(data)) {
             let clipdata = data[clipkey]
@@ -143,8 +153,8 @@ fetch("clips.json")
                 card.setAttribute("week", clipdata.week)
                 card.setAttribute("title", clipdata.title)
 
-                let isunseen = unseen.includes(clipkey)
-                card.setAttribute("latest", isunseen)
+                let isseen = seen.includes(clipkey)
+                card.setAttribute("latest", !isseen)
 
                 card.setAttribute("goesto", clipkey)
 
