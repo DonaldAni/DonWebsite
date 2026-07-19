@@ -6,6 +6,14 @@
         <link rel="stylesheet" href="/shared/css/style.css">
         <link rel="icon" type="image/png" href="/shared/img/DarcyIcon.png">
         <style>
+            #ffwarning {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        </style>
+
+        <style>
             html {
                 filter: hue-rotate(0deg);
             }
@@ -24,6 +32,30 @@
         <iframe src="source/index.html" style="width: 800px; height: 600px;"allow="autoplay; fullscreen; keyboard" 
         sandbox="allow-scripts allow-same-origin allow-forms allow-popups">></iframe>
         <h3>Made by The Sunglasses Team!</h3>
+
+        <div id="ffwarning">
+            <span style="color: red;"><h3>FIREFOX USERS:</h3></span>
+            <p>The game probably won't run on firefox. This is okay and expected. What you need to do is:</p>
+            <ul style="text-align: left; width: 55%;">
+                <li>go to about:config</li>
+                <li>turn the following settings to true:
+                    <ul>
+                        <li>webgl.force-enabled</li>
+                        <li>layers.acceleration.force-enabled</li>
+                    </ul>
+                </li>
+                <li>restart your web browser</li>
+            </ul>
+        </div>
     </body>
 </html>
 <script src="/shared/js/topbar.js"></script>
+<script>
+    const FF_WARNING = document.getElementById("ffwarning")
+
+    if(navigator.userAgent.includes("Firefox")) {
+        FF_WARNING.style.display = "flex"
+    } else {
+        FF_WARNING.style.display = "none"
+    }
+</script>
