@@ -13,7 +13,8 @@ let queue = {
     "sans.": "sans. (dark world).ogg",
     "future diary": "Kuusou Mesorogiwi.ogg",
     "dont.come.back": "dont come back.ogg",
-    "a way out": "gm48 title.ogg"
+    "a way out": "gm48 title.ogg",
+    "morning jog": "morning jog.ogg"
 }
 
 let audiolength = NaN
