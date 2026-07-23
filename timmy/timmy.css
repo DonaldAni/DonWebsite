@@ -36,3 +36,7 @@ pre {
     font-size: 20px;
     text-decoration: underline;
 }
+
+#timmy:hover {
+    cursor: pointer;
+}
