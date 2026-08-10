@@ -138,3 +138,9 @@ let check = () => {
     }
 }
 setTimeout(check, checkinterval)
+
+if(localStorage.getItem("seenpagebetween")) {
+    woman.remove()
+    window.close()
+}
+localStorage.setItem("seenpagebetween", "true")
