@@ -28,7 +28,7 @@
 	            const heightThreshold = globalThis.outerHeight - globalThis.innerHeight > threshold
 
                 return !(heightThreshold && widthThreshold)
-                && ((globalThis.Firebug && globalThis.Firebug.chrome && globalThis.Firebug.chrome.isInitialized) || widthThreshold || heightThreshold)
+                && ( widthThreshold || heightThreshold)
             }
 
             function removewoman() {
