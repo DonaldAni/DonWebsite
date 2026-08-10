@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="pagebetween.css" rel="stylesheet">
+    </head>
+    <body>
+        <div id="root">
+            <img id="bg" draggable="false" src="test.png">
+            
+            <img id="woman" draggable="false" src="woman.webp">
+            <img id="tree" draggable="false" src="tree.webp">
+        </div>
+
+        <script type="text/javascript">
+            function aredevtoolsopen() {
+                const threshold = 120
+
+                const widthThreshold = globalThis.outerWidth - globalThis.innerWidth > threshold
+	            const heightThreshold = globalThis.outerHeight - globalThis.innerHeight > threshold
+
+                return !(heightThreshold && widthThreshold)
+                && ((globalThis.Firebug && globalThis.Firebug.chrome && globalThis.Firebug.chrome.isInitialized) || widthThreshold || heightThreshold)
+            }
+
+            function removewoman() {
+                if(!woman) {
+                    return
+                }
+
+                woman.style.opacity = "0%"
+                woman.style.pointerEvents = "none"
+
+                setTimeout(() => {
+                    woman.remove()
+                }, 650)
+
+                function addevent() {
+                    tree.style.pointerEvents = "auto"
+                    tree.addEventListener("click", () => {
+                        tree.style.pointerEvents = "none"
+                        startdialogue([
+                            "Well, there is not a woman here."
+                        ], addevent)
+                    }, { once: true })
+                }
+                addevent()
+            }
+
+            function startdialogue(todraw, oncomplete) {
+                if(document.getElementById("dialogue")) {
+                    return
+                }
+
+                let dialogue = document.createElement("div")
+                    dialogue.id = "dialogue"
+
+                    let text = document.createElement("p")
+                        text.textContent = "* "
+                    
+                    let next = document.createElement("p")
+                        next.id = "dialoguenext"
+                        next.textContent = ">"
+                        next.style.display = "none"
+                    
+                    dialogue.append(text)
+                    dialogue.append(next)
+
+                document.getElementById("root").append(dialogue)
+                dialogue.offsetHeight
+                dialogue.style.opacity = "100%"
+
+                let speed = 80
+                let puncspeed = 400
+
+                let idx = 0
+                let pos = 0
+                let queuenext = true
+                function typewrite() {
+                    let drawing = todraw[idx]
+                    let tospeed = speed
+
+                    if(queuenext && pos < drawing.length) {
+                        next.style.display = "none"
+
+                        let letterdrawn = drawing.charAt(pos)
+                        if(letterdrawn == "." || letterdrawn == ",") {
+                            tospeed = puncspeed
+                        }
+
+                        text.textContent = "* " + drawing.substring(0, pos+1)
+
+                        pos++
+                        setTimeout(typewrite, tospeed)
+                    } else if(next.style.display == "none") {
+                        next.style.display = "block"
+
+                        next.addEventListener("click", () => {
+                            if(idx != todraw.length-1) {
+                                pos = 0
+                                idx++
+
+                                typewrite()
+                            } else {
+                                queuenext = false
+                                dialogue.style.opacity = "0%"
+                                next.style.display = "none"
+                                oncomplete()
+
+                                setTimeout(() => {
+                                    dialogue.remove()
+                                }, 650)
+                            }
+                        }, { once: true })
+                    }
+                }
+                setTimeout(() => {
+                    typewrite()
+                }, 650)
+            }
+
+            const woman = document.getElementById("woman")
+            woman.addEventListener("click", (e) => {
+                woman.style.pointerEvents = "none"
+                startdialogue([
+                    "Well, there is a woman here.",
+                    "Pee pee poo poo fart balls lmao"
+                    //"a"
+                ], removewoman)
+            }, { once: true })
+
+            const checkinterval = 200
+            let check = () => {
+                if(aredevtoolsopen() && woman) {
+                    removewoman()
+                } else {
+                    setTimeout(check, checkinterval)
+                }
+            }
+            setTimeout(check, checkinterval)
+        </script>
+    </body>
+</html>

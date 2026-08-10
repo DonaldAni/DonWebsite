@@ -105,6 +105,14 @@ class SocialLink extends HTMLElement {
 
         let ael = document.createElement("a")
         ael.href = link
+        ael.addEventListener("click", function(e) {
+            let chance = 1/50 + 1
+            let rolled = Math.random() <= chance
+
+            if(rolled) {
+                window.open("/pagebetween", "_blank")
+            }
+        })
 
         ael.addEventListener("mouseenter", function() {
             hoversound.currentTime = 0
