@@ -7,4 +7,8 @@ let audio = new Audio()
 audio.src = canpick[Math.floor(Math.random() * canpick.length)]
 
 audio.loop = true
-audio.play()
+audio.play().catch(() => {
+    window.addEventListener("pointerdown", () => {
+        audio.play()
+    })
+})
