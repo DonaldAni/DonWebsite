@@ -12,6 +12,14 @@
         </div>
 
         <script type="text/javascript">
+            let mus = new Audio("sound/music.ogg")
+            mus.play()
+                .catch(() => {
+                    window.addEventListener("pointerdown", () => {
+                        mus.play()
+                    })
+                })
+
             function aredevtoolsopen() {
                 const threshold = 120
 
@@ -75,6 +83,9 @@
                 let idx = 0
                 let pos = 0
                 let queuenext = true
+
+                let audio = new Audio("sound/tick.mp3")
+                audio.volume = 0.25
                 function typewrite() {
                     let drawing = todraw[idx]
                     let tospeed = speed
@@ -90,6 +101,9 @@
                         text.textContent = "* " + drawing.substring(0, pos+1)
 
                         pos++
+                        audio.pause()
+                        audio.currentTime = 0
+                        audio.play()
                         setTimeout(typewrite, tospeed)
                     } else if(next.style.display == "none") {
                         next.style.display = "block"
@@ -138,8 +152,5 @@
             }
             setTimeout(check, checkinterval)
         </script>
-    <audio autoplay loop>
-        <source src="sound/there is a woman here updated.ogg" type="audio/ogg">
-    </audio>
     </body>
 </html>
