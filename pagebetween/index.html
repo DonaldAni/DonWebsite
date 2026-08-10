@@ -13,6 +13,7 @@
 
         <script type="text/javascript">
             let mus = new Audio("sound/music.ogg")
+            mus.loop = true
             mus.play()
                 .catch(() => {
                     window.addEventListener("pointerdown", () => {
