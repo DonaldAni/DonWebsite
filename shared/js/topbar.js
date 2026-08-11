@@ -107,7 +107,7 @@ class SocialLink extends HTMLElement {
         ael.href = link
         if(!localStorage.getItem("seenpagebetween")) {
             ael.addEventListener("click", function(e) {
-                let chance = 1/50 + 1
+                let chance = 1/50
                 let rolled = Math.random() <= chance
 
                 if(rolled) {
