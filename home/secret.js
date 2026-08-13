@@ -25,24 +25,41 @@ secretpanel.addEventListener("mouseleave", () => {
 
 secretsfound = document.getElementById("secretsfound")
 
-var seensofar = window.localStorage.getItem("secrets")
-if(seensofar === null) seensofar = "[]"
-        
-var parsed = JSON.parse(seensofar)
-console.log(parsed)
+let loadedsecrets = false
+async function loadsecrets() {
+    var seensofar = window.localStorage.getItem("secrets")
+    if(seensofar === null) seensofar = "[]"
+            
+    var parsed = JSON.parse(seensofar)
+    console.log(parsed)
 
-for(seen of parsed) {
-    let li = document.createElement("li")
-    let a = document.createElement("a")
-    a.href = seen.target
-    a.innerHTML = seen.key
+    for(seen of [...parsed]) {
+        let res = await fetch(seen.target)
+        if(!res.ok) {
+            console.log("removing invalid secret")
+            parsed.splice(parsed.indexOf(seen), 1)
+            continue
+        }
 
-    li.appendChild(a)
-    secretsfound.appendChild(li)
+        let li = document.createElement("li")
+        let a = document.createElement("a")
+        a.href = seen.target
+        a.innerHTML = seen.key
+
+        li.appendChild(a)
+        secretsfound.appendChild(li)
+    }
+
+    localStorage.setItem("secrets", JSON.stringify(parsed))
+    loadedsecrets = true
 }
 
 
 secretbutton.addEventListener("click", async () => {
+    if(!loadedsecrets) {
+        return
+    }
+
     var input = secretinput.value
 
     var res = await fetch(`https://donaldapi.kayladotcom.org/verifysecret/${input}`)
