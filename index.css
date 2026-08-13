@@ -1,0 +1,29 @@
+@import "/shared/css/fonts.css";
+
+html {
+    background-color: black;
+    color: gray;
+    margin: 0%;
+    padding: 0%;
+
+    font-family: "comic sans";
+    font-size: 16px;
+}
+
+pre {
+    margin-right: 7%;
+    font-size: 1.15vw;
+}
+
+.center-screen {
+  display: grid;
+  place-items: center; 
+  min-height: 100vh;   
+  text-align: center;  
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+} /*hypothetically this should stop it from scrolling, idk why it did that
