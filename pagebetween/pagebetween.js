@@ -29,27 +29,24 @@ function removewoman() {
         woman.remove()
     }, 650)
 
-function addevent() {
-    tree.style.pointerEvents = "auto"
-    tree.addEventListener("click", () => {
-        tree.style.pointerEvents = "none"
-        startdialogue([
-            "is empty.",
-            "what more is there to say... i bet shes looking for someone else.",
-            "maybe you should get going."
-        ], finalwhisper)
-    }, { once: true })
+    function addevent() {
+        tree.style.pointerEvents = "auto"
+        tree.addEventListener("click", () => {
+            tree.style.pointerEvents = "none"
+            startdialogue([
+                "is empty.",
+                "what more is there to say... i bet shes looking for someone else.",
+                "maybe you should get going."
+            ], addevent)
+        }, { once: true })
+    }
+    addevent()
 }
 
-function finalwhisper() {
-    startdialogue([
-        "she whispers to you from behind.",
-        "we wont meet ever again.. but i hope your unfit eyes can see the beauty of this place."
-    ], addevent)
-}
 
-addevent()
-}
+// she wont ever find me.
+// - darcy
+
 
 function startdialogue(todraw, oncomplete) {
     if(document.getElementById("dialogue")) {
