@@ -1,4 +1,4 @@
-let mus = new Audio("sound/music.ogg")
+let mus = new Audio("sound/betweenitall.mp3")
 mus.loop = true
 mus.play()
     .catch(() => {
@@ -29,16 +29,26 @@ function removewoman() {
         woman.remove()
     }, 650)
 
-    function addevent() {
-        tree.style.pointerEvents = "auto"
-        tree.addEventListener("click", () => {
-            tree.style.pointerEvents = "none"
-            startdialogue([
-                "Shes gone, you should get going..."
-            ], addevent)
-        }, { once: true })
-    }
-    addevent()
+function addevent() {
+    tree.style.pointerEvents = "auto"
+    tree.addEventListener("click", () => {
+        tree.style.pointerEvents = "none"
+        startdialogue([
+            "is empty.",
+            "what more is there to say... i bet shes looking for someone else.",
+            "maybe you should get going."
+        ], finalwhisper)
+    }, { once: true })
+}
+
+function finalwhisper() {
+    startdialogue([
+        "she whispers to you from behind.",
+        "we wont meet ever again.. but i hope your unfit eyes can see the beauty of this place."
+    ], addevent)
+}
+
+addevent()
 }
 
 function startdialogue(todraw, oncomplete) {
@@ -124,7 +134,8 @@ woman.addEventListener("click", (e) => {
     woman.style.pointerEvents = "none"
     startdialogue([
         "Well, there is a woman here.",
-        "You aren't supposed to be here, aren't you."
+        "She seems to be looking around for someone...",
+        "She sees you, and where there once was a woman..."
         //"a"
     ], removewoman)
 }, { once: true })
