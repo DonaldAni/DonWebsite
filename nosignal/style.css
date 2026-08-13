@@ -1,0 +1,12 @@
+body {
+    display: grid;
+    place-items: center;
+    height: 70vh;
+    margin: 0;
+    text-align: center;
+    background-color: blue;
+    font-size: xx-large;
+}
+h1 {
+  text-shadow: 4px 4px #000000;
+}
