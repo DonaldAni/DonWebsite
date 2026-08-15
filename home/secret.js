@@ -53,9 +53,10 @@ async function loadsecrets() {
     localStorage.setItem("secrets", JSON.stringify(parsed))
     loadedsecrets = true
 }
-
+loadsecrets()
 
 secretbutton.addEventListener("click", async () => {
+    console.log(loadedsecrets)
     if(!loadedsecrets) {
         return
     }
