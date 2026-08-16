@@ -3,6 +3,8 @@
         <link rel="stylesheet" href="/shared/css/style.css">
         <link rel="icon" type="image/png" href="/shared/img/DarcyIcon.png">
     
+        <page-jingle src="sound/ask-jingle.mp3" volume="0.3"></page-jingle>
+
         <title>Don's Residence</title>
 
         <meta content="DONALDANI.org" property="og:title" />
@@ -77,8 +79,6 @@
         </div>
     </body>
 </html>
-<script src="js/jingle.js"></script>
-<script src="/shared/js/topbar.js"></script>
 <script>
     const ANSWERED = document.getElementById("answered")
     const TOGET = "https://donaldapi.kayladotcom.org/ask"
@@ -145,4 +145,7 @@
 
     getquestions()
 </script>
+
+<script src="/shared/js/topbar.js"></script>
+<script src="/shared/js/jingle.js"></script>
 <script src="https://donaldapi.kayladotcom.org/philads/webring.js?v=1"></script>

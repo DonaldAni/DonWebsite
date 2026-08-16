@@ -29,6 +29,16 @@ function removewoman() {
         woman.remove()
     }, 650)
 
+    function fart() {
+        tree.style.pointerEvents = "auto"
+        tree.addEventListener("click", () => {
+            tree.style.pointerEvents = "none"
+            startdialogue([
+                "she whispers to you from behind.",
+                "we wont ever meet again.. but i hope your unfit eyes can see the beauty of this place."
+            ])
+        })
+    }
     function addevent() {
         tree.style.pointerEvents = "auto"
         tree.addEventListener("click", () => {
@@ -37,7 +47,7 @@ function removewoman() {
                 "is empty.",
                 "what more is there to say... i bet shes looking for someone else.",
                 "maybe you should get going."
-            ], addevent)
+            ], fart)
         }, { once: true })
     }
     addevent()
@@ -112,7 +122,9 @@ function startdialogue(todraw, oncomplete) {
                     queuenext = false
                     dialogue.style.opacity = "0%"
                     next.style.display = "none"
-                    oncomplete()
+                    if(oncomplete) {
+                        oncomplete()
+                    }
 
                     setTimeout(() => {
                         dialogue.remove()
