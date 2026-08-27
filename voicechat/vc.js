@@ -5,13 +5,28 @@ const config = {
 
 let socket
 let stream
+
 const peers = new Map()
+class Peer {
+    constructor(id, conn) {
+        this.id = id
+        this.conn = conn
+
+        this.audio = new Audio()
+        this.audio.autoplay = true
+    }
+}
 
 const ACTIVATE_BUTTON = document.getElementById("activate")
 const AUDIO = document.getElementById("remote")
 
 async function makeconnectionwithid(id) {
+    if(peers.has(id)) {
+        console.log("this procs multiple times")
+    }
+
     const conn = new RTCPeerConnection(config)
+    const peer = new Peer(id, conn)
 
     for(const track of stream.getTracks()) {
         conn.addTrack(track, stream)
@@ -32,10 +47,10 @@ async function makeconnectionwithid(id) {
     })
     conn.addEventListener("track", (e) => {
         // temp! make dynamic audio objects later!
-        AUDIO.srcObject = e.streams[0]
+        peer.audio.srcObject = e.streams[0]
     })
 
-    return conn
+    return peer
 }
 
 const packet_handlers = {
@@ -46,62 +61,62 @@ const packet_handlers = {
                 continue
             }
 
-            const conn = await makeconnectionwithid(id)
-            peers.set(id, conn)
+            const peer = await makeconnectionwithid(id)
+            peers.set(id, peer)
 
-            await conn.setLocalDescription(
-                await conn.createOffer()
+            await peer.conn.setLocalDescription(
+                await peer.conn.createOffer()
             )
 
             socket.send(JSON.stringify({
                 type: "offer",
                 data: {
                     to: id,
-                    offer: conn.localDescription
+                    offer: peer.conn.localDescription
                 }
             }))
         }
     },
 
     async offer(data) {
-        const conn = await makeconnectionwithid(data.from)
-        await conn.setRemoteDescription(data.offer)
+        const peer = await makeconnectionwithid(data.from)
+        peers.set(data.from, peer)
+        await peer.conn.setRemoteDescription(data.offer)
 
-        await conn.setLocalDescription(
-            await conn.createAnswer()
+        await peer.conn.setLocalDescription(
+            await peer.conn.createAnswer()
         )
 
-        peers.set(data.from, conn)
         socket.send(JSON.stringify({
             type: "answer",
             data: {
                 to: data.from,
-                answer: conn.localDescription
+                answer: peer.conn.localDescription
             }
         }))
     },
     async answer(data) {
-        const conn = peers.get(data.from)
-        if(!conn) {
+        const peer = peers.get(data.from)
+        if(!peer) {
             console.error("don't know who this answer is from...")
             return
         }
 
-        await conn.setRemoteDescription(data.answer)
+        await peer.conn.setRemoteDescription(data.answer)
     },
     async ice_candidate(data) {
-        const conn = peers.get(data.from)
-        if(!conn) {
+        const peer = peers.get(data.from)
+        if(!peer) {
             console.error("don't know who this ice candidate is for...")
             return
         }
 
-        if(!conn.remoteDescription) {
+        if(!peer.conn.remoteDescription) {
             console.log("i cant handle this right now! im frrrrreaking out!")
             return
         }
 
-        await conn.addIceCandidate(data.candidate)
+        await peer.conn.addIceCandidate(data.candidate)
     }
 }
 
