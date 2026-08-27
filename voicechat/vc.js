@@ -12,8 +12,16 @@ class Peer {
         this.id = id
         this.conn = conn
 
+        this.candidatebacklog = []
+
         this.audio = new Audio()
         this.audio.autoplay = true
+    }
+
+    async dispatchbacklog() {
+        for(const candidate of this.candidatebacklog) {
+            await this.conn.addIceCandidate(candidate)
+        }
     }
 }
 
@@ -54,6 +62,22 @@ async function makeconnectionwithid(id) {
 }
 
 const packet_handlers = {
+    async user_connected(data) {
+        // we dont really care about this... all the stuff goes in the handshake
+        console.log("ok")
+        console.log(data)
+    },
+    async user_disconnected(data) {
+        const peer = peers.get(data.id)
+        if(!peer) {
+            console.error("don't know who this user is...")
+            return
+        }
+
+        peer.conn.close()
+        peers.delete(data.id)
+    },
+
     async room_info(data) {
         for(const id of data.connected_users) {
             if(peers.has(id)) {
@@ -112,10 +136,11 @@ const packet_handlers = {
         }
 
         if(!peer.conn.remoteDescription) {
-            console.log("i cant handle this right now! im frrrrreaking out!")
+            peer.candidatebacklog.push(data.candidate)
             return
         }
 
+        await peer.dispatchbacklog()
         await peer.conn.addIceCandidate(data.candidate)
     }
 }
