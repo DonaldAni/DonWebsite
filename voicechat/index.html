@@ -5,8 +5,26 @@
 
     </head>
     <body>
-        <button id="activate">Activate Microphone</button>
-        <audio id="remote" autoplay></audio>
+        <h2>connect to server</h2>
+        <button id="activate">connect!</button>
+
+        <hr>
+
+        <h2>change profile</h2>
+        <label for="nameinput">name:</label>
+        <input type="text" id="nameinput" name="nameinput" maxlength="32" placeholder="type name here">
+
+        <label for="iconinput">icon id:</label>
+        <input type="number" id="iconinput" name="iconinput" value="0" min="0">
+        <!-- <br> -->
+        <button id="changeprofile">change profile</button>
+
+        <hr>
+
+        <h2>currently online:</h2>
+        <ul id="currentlyonline">
+            <li>connect to see who's online</li>
+        </ul>
     </body>
 </html>
 <script src="vc.js"></script>
