@@ -75,7 +75,10 @@ body {
 
     transition:
         background-color .12s linear,
-        opacity          .12s linear;
+        opacity          .12s linear,
+
+        transform .075s linear,
+        filter    .075s linear;
 }
 .vc-icon {
     height: 100%;
@@ -86,10 +89,6 @@ body {
 .vc-icon-container.deafened {
     background-color: #26556b;
     opacity: 50%;
-
-    transition:
-        background-color .12s linear,
-        opacity          .12s linear;
 }
 
 
@@ -164,6 +163,10 @@ body {
     display: flex;
         align-items: center;
         justify-content: center;
+
+    transition:
+        transform .075s linear,
+        filter    .075s linear;
 }
 .vc-control-button-graphic {
     height: 100%;
@@ -174,11 +177,6 @@ body {
     -moz-user-select: none;
 }
 
-.vc-clickable {
-    transition:
-        transform .075s linear,
-        filter    .075s linear;
-}
 .vc-clickable:hover:not(.vc-clickable:active) {
     transform: translate(0px, -4px);
     filter: drop-shadow(4px 8px 4px rgba(0,0,0,.5))

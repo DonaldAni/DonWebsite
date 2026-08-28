@@ -477,6 +477,26 @@ const packet_handlers = {
         } else {
             peer.gridentry.iconcontainer.classList.remove("deafened")
         }
+    },
+
+    async ban(data) {
+        alert(data.reason)
+    },
+    async system_message(data) {
+        if(!'speechSynthesis' in window) {
+            console.warn("could not play message")
+            return
+        }
+
+        const utterance = new SpeechSynthesisUtterance(data.msg)
+
+        const voices = window.speechSynthesis.getVoices()
+        const david = voices.find((voice) => voice.name.includes("David"))
+        if(david) {
+            utterance.voice = david
+        }
+
+        window.speechSynthesis.speak(utterance)
     }
 }
 
