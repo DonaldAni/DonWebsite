@@ -3,6 +3,7 @@ const config = {
     iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] // temp
 }
 
+const PROFILE_STORAGE_KEY = "vc-profile"
 const profile = {
     name: "User" + Math.floor(Math.random()*1000),
     icon: 0,
@@ -10,9 +11,21 @@ const profile = {
 
     gridentry: {}
 }
+if(window.localStorage.getItem(PROFILE_STORAGE_KEY)) {
+    const data = JSON.parse(window.localStorage.getItem(PROFILE_STORAGE_KEY))
+
+    profile.name = data.name
+    profile.icon = data.icon
+}
+
 function setprofile(name, icon, forced=false) {
     profile.name = name
     profile.icon = icon
+
+    window.localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify({
+        name: profile.name,
+        icon: profile.icon
+    }))
 
     if(forced) {
         profile.gridentry.name.textContent = name
@@ -179,7 +192,9 @@ class Peer {
         this.id = user.id
         this.profile = {
             name: user.name,
-            icon: user.icon
+            icon: user.icon,
+
+            changed: false
         }
 
         this.conn = conn
@@ -270,10 +285,6 @@ const packet_handlers = {
         // we dont really care about this... all the stuff goes in the handshake
         console.log("ok")
         console.log(data)
-
-        const sound = new Audio("snd/connect.ogg")
-            sound.volume = .65
-            sound.play()
     },
     async user_disconnected(data) {
         const peer = peers.get(data.user.id)
@@ -286,7 +297,13 @@ const packet_handlers = {
         peer.gridentry.obj.remove()
         peers.delete(data.user.id)
 
-        const sound = new Audio("snd/disconnect.ogg")
+        let dcsound = "disconnect"
+        if(peer.profile.icon < 0) {
+            // special user
+            dcsound += "-special"
+        }
+
+        const sound = new Audio(`snd/${dcsound}.ogg`)
             sound.volume = .65
             sound.play()
     },
@@ -366,6 +383,21 @@ const packet_handlers = {
         const peer = peers.get(data.id)
         peer.profile.name = data.name
         peer.profile.icon = data.icon
+
+        if(!peer.profile.changed) {
+            console.log("first change!")
+
+            let csound = "connect"
+            if(peer.profile.icon < 0) {
+                // special user
+                csound += "-special"
+            }
+
+            const sound = new Audio(`snd/${csound}.ogg`)
+                sound.volume = .65
+                sound.play()
+        }
+        peer.profile.changed = true
 
         peer.gridentry.name.textContent = data.name
         peer.gridentry.icon.src = `/chatroom/img/icons/icon${data.icon}.png`
