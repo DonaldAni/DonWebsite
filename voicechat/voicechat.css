@@ -1,0 +1,255 @@
+@import url("/shared/css/fonts.css");
+
+body {
+    margin: 0;
+}
+#container {
+    width: 100%;
+    height: 94vh;
+
+    display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+}
+
+#container * {
+    /* border: 1px solid red; */
+}
+
+#vc-frame {
+    height: 80%;
+    aspect-ratio: 4/3;
+
+    background-color: #20C3D4;
+
+    display: flex;
+    position: relative;
+}
+
+#vc-body {
+    width: 80%;
+    height: 100%;
+
+    display: grid;
+        grid-template-columns: repeat(auto-fit, 200px);
+}
+
+.vc-peer {
+    width: 200px;
+    height: 200px;
+    box-sizing: border-box;
+
+    filter: drop-shadow(8px 8px 3px rgba(0,0,0,.35));
+    /* background-color: burlywood; */
+
+    display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+}
+.vc-peer-top {
+    width: 100%;
+    height: 90%;
+    display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5%;
+
+    /* background-color: brown; */
+}
+
+.vc-icon {
+    height: 80%;
+
+    background: #349ccc;
+    padding: 5%;
+    box-sizing: border-box;
+
+    box-shadow: inset 4px 4px 4px rgba(255, 255, 255, 0.35);
+
+    border-radius: 4px;
+    border: 2px solid #2d4a88;
+}
+
+.vc-volbar {
+    width: 8%;
+    height: 80%;
+    box-sizing: border-box;
+
+    background: #ff0000;
+    background: linear-gradient(180deg,rgba(255, 0, 0, 1) 0%, rgba(251, 255, 0, 1) 50%, rgba(0, 255, 0, 1) 100%);
+
+    border-radius: 4px;
+    border: 2px solid black;
+
+    position: relative;
+
+    box-shadow: inset -4px -4px 4px rgba(0,0,0, .3);
+}
+.vc-volbar-cover {
+    position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 50%;
+
+    background-color: black;
+}
+
+.vc-peer > p {
+    margin: 0;
+
+    font-size: 150%;
+    font-family: "comic sans";
+}
+
+#vc-sidebar {
+    width: 20%;
+    height: 100%;
+
+    background-color: #00000030;
+
+    display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* justify-content: flex-start; */
+}
+
+#vc-controls-md {
+    width: 100%;
+    height: 40%;
+
+    display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+}
+.vc-control-button {
+    height: 40%;
+    aspect-ratio: 1;
+
+    background-color: #3380e4;
+    border: 8px solid #2d4a88;
+    border-radius: 20px;
+
+    box-shadow: inset 4px 4px 4px rgba(255, 255, 255, 0.35);
+    filter: drop-shadow(4px 4px 4px rgba(0,0,0,.5));
+
+    display: flex;
+        align-items: center;
+        justify-content: center;
+}
+.vc-control-button-graphic {
+    height: 100%;
+
+    filter: drop-shadow(4px 4px 2px rgba(0,0,0,.25));
+}
+
+.vc-clickable {
+    transition:
+        transform .075s linear,
+        filter    .075s linear;
+}
+.vc-clickable:hover:not(.vc-clickable:active) {
+    transform: translate(0px, -4px);
+    filter: drop-shadow(4px 8px 4px rgba(0,0,0,.5))
+}
+/* white overlay */
+.vc-clickable:hover::after {
+    content: "";
+    position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+    background-color: white;
+    opacity: .15;
+
+    border-radius: 20px;
+}
+/* black overlay */
+.vc-clickable:active::after {
+    content: "";
+    position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+    background-color: black;
+    opacity: .15;
+
+    border-radius: 20px;
+}
+
+#vc-controls-gains {
+    width: 100%;
+    height: 60%;
+
+    display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+}
+.vc-control-gain {
+    width: 50%;
+    height: 100%;
+
+    display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+}
+.vc-control-gain > p {
+    font-family: "comic sans";
+}
+
+input[type="range"] {
+    writing-mode: vertical-lr;
+    direction: rtl;
+    width: 15px;
+    height: 80%;
+
+    -webkit-appearance: none;
+    appearance: none;
+}
+input[type="range"]:focus {
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track, input[type="range"]::-moz-range-track {
+    background: #2d4a88;
+    width: 15px;
+    border-radius: 4px;
+}
+input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb {
+    -webkit-appearance: none;
+    height: 25px;
+    width: 15px;
+    background: white;
+    border: none;
+    background-image: url("img/slidergrip.png");
+    border-radius: 2px;
+    /* margin-top: -5px; */
+}
+input[type="range"]::-moz-range-progress {
+    background-color: #3380e4;
+    width: 100%;
+    border-radius: 4px;
+}
+
+#vc-blanker {
+    position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+    background-color: rgba(0, 0, 0, 0.493);
+
+    display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+}

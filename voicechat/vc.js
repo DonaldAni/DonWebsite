@@ -3,38 +3,142 @@ const config = {
     iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] // temp
 }
 
-const NAME_INPUT = document.getElementById("nameinput")
-const ICON_INPUT = document.getElementById("iconinput")
-const CHANGE_BUTTON = document.getElementById("changeprofile")
 const profile = {
     name: "User" + Math.floor(Math.random()*1000),
     icon: 0,
-    id: null
+    id: null,
+
+    gridentry: {}
 }
-function setprofile(name, icon) {
+function setprofile(name, icon, forced=false) {
     profile.name = name
     profile.icon = icon
 
-    NAME_INPUT.value = name
-    ICON_INPUT.value = icon
+    if(forced) {
+        profile.gridentry.name.textContent = name
+        profile.gridentry.icon.setAttribute("iconid", icon)
+        profile.gridentry.icon.src = `/chatroom/img/icons/icon${icon}.png`
+    }
 }
 
-CHANGE_BUTTON.addEventListener("click", (e) => {
-    e.preventDefault()
+function flipicon() {
+    let curid = parseInt(profile.gridentry.icon.getAttribute("iconid"))
+    if(curid < 0) {
+        return
+    }
 
+    console.log(curid)
+    profile.gridentry.icon.setAttribute("iconid", (curid+1)%8)
+    curid = parseInt(profile.gridentry.icon.getAttribute("iconid"))
+
+    profile.gridentry.icon.src = `/chatroom/img/icons/icon${curid}.png`
+}
+function sendprofiledata() {
     socket.send(JSON.stringify({
         type: "update_profile",
         data: {
-            name: NAME_INPUT.value,
-            icon: parseInt(ICON_INPUT.value)
+            name: profile.gridentry.name.textContent,
+            icon: parseInt(profile.gridentry.icon.getAttribute("iconid"))
         }
     }))
+}
+
+const BODY = document.getElementById("vc-body")
+
+const MUTE_BUTTON = document.getElementById("mute")
+const DEAFEN_BUTTON = document.getElementById("deafen")
+
+const INPUT_GAIN = document.getElementById("inputgain")
+const OUTPUT_GAIN = document.getElementById("outputgain")
+
+INPUT_GAIN.addEventListener("input", (e) => {
+    if(!stream) {
+        return
+    }
+
+    gainnode.gain.value = !muted ? INPUT_GAIN.value : 0
 })
 
-const CURRENTLY_ONLINE_UL = document.getElementById("currentlyonline")
-
 let socket
+
 let stream
+let gainnode
+let analysernode
+let localvolume = 0
+
+let muted = false
+let deafened = false
+
+MUTE_BUTTON.addEventListener("click", (e) => {
+    if(!stream) {
+        return
+    }
+
+    muted = !muted
+    gainnode.gain.value = !muted ? INPUT_GAIN.value : 0
+
+    let graphicsrc = "img/mute.png"
+    if(!muted) {
+        graphicsrc = "img/unmute.png"
+    }
+
+    MUTE_BUTTON.querySelector("img").src = graphicsrc
+})
+DEAFEN_BUTTON.addEventListener("click", (e) => {
+    if(!stream) {
+        return
+    }
+
+    deafened = !deafened
+    for(const peer of peers.values()) {
+        peer.audio.muted = deafened
+    }
+    
+    let graphicsrc = "img/deafen.png"
+    if(!deafened) {
+        graphicsrc = "img/undeafen.png"
+    }
+
+    DEAFEN_BUTTON.querySelector("img").src = graphicsrc
+})
+
+function makegridspot(user) {
+    let vcPeer = document.createElement("div")
+        vcPeer.className = "vc-peer"
+        
+        let vcPeerTop = document.createElement("div")
+            vcPeerTop.className = "vc-peer-top"
+
+            let vcIcon = document.createElement("img")
+                vcIcon.className = "vc-icon"
+                vcIcon.src = `/chatroom/img/icons/icon${user.icon}.png`
+                vcIcon.setAttribute("iconid", user.icon)
+
+            let vcVolbar = document.createElement("div")
+                vcVolbar.className = "vc-volbar"
+
+                let vcVolbarCover = document.createElement("div")
+                    vcVolbarCover.className = "vc-volbar-cover"
+                
+                vcVolbar.append(vcVolbarCover)
+            vcPeerTop.append(vcIcon, vcVolbar)
+        
+        let vcName = document.createElement("p")
+            vcName.contentEditable = false
+            vcName.spellcheck = false
+            vcName.textContent = user.name
+        
+        vcPeer.append(vcPeerTop, vcName)
+
+    return {
+        obj: vcPeer,
+
+        name: vcName,
+        icon: vcIcon,
+        volbar: vcVolbar,
+        volbarcover: vcVolbarCover
+    }
+}
 
 const peers = new Map()
 class Peer {
@@ -50,12 +154,12 @@ class Peer {
 
         this.audio = new Audio()
         this.audio.autoplay = true
+        this.stream = null
 
-        // add to online list
-        let li = document.createElement("li")
-            li.id = this.id
-            li.textContent = user.name
-        CURRENTLY_ONLINE_UL.append(li)
+        // add to grid
+        const gridspot = makegridspot(user)
+        this.gridentry = gridspot
+        BODY.append(gridspot.obj)
     }
 
     async dispatchbacklog() {
@@ -92,7 +196,36 @@ async function makeconnection(user) {
         }))
     })
     conn.addEventListener("track", (e) => {
-        peer.audio.srcObject = e.streams[0]
+        // start tracking volume
+        let ctx = new AudioContext()
+        let source = ctx.createMediaStreamSource(e.streams[0])
+        let dest = ctx.createMediaStreamDestination()
+
+        let analysernode = ctx.createAnalyser()
+        analysernode.fftSize = 256
+        source.connect(analysernode)
+        analysernode.connect(dest)
+
+        const bufferlength = analysernode.fftSize
+        const dataarray = new Float32Array(bufferlength)
+
+        function updatevolume() {
+            analysernode.getFloatTimeDomainData(dataarray)
+
+            let sum = 0
+            for(const val of dataarray) {
+                sum += val*val
+            }
+
+            let vol = Math.sqrt(sum/bufferlength) * 5
+            peer.gridentry.volbarcover.style.height = `${(1-vol)*100}%`
+
+            requestAnimationFrame(updatevolume)
+        }
+        updatevolume()
+
+        peer.stream = dest.stream
+        peer.audio.srcObject = dest.stream
     })
 
     return peer
@@ -112,12 +245,12 @@ const packet_handlers = {
         }
 
         peer.conn.close()
-        document.getElementById(peer.id).remove()
+        peer.gridentry.obj.remove()
         peers.delete(data.user.id)
     },
 
     async room_info(data) {
-        CURRENTLY_ONLINE_UL.replaceChildren()
+        BODY.replaceChildren()
 
         profile.id = data.your_id
         for(const user of data.connected_users) {
@@ -144,10 +277,32 @@ const packet_handlers = {
             }))
         }
 
-        let li = document.createElement("li")
-            li.id = "-1"
-            li.textContent = "you!"
-        CURRENTLY_ONLINE_UL.prepend(li)
+        // add to grid
+        const gridspot = makegridspot(profile)
+        gridspot.name.contentEditable = true
+        gridspot.icon.classList.add("vc-clickable")
+
+        gridspot.name.addEventListener("keydown", (e) => {
+            if(e.key === "Enter") {
+                e.preventDefault()
+
+                sendprofiledata()
+                setTimeout(() => {
+                    gridspot.name.blur()
+                }, 0)
+            }
+        })
+        gridspot.icon.addEventListener("click", (e) => {
+            let lastid = parseInt(gridspot.icon.getAttribute("iconid"))
+            flipicon()
+            if(parseInt(gridspot.icon.getAttribute("iconid")) != lastid) {
+                sendprofiledata()
+            }
+        })
+
+        profile.gridentry = gridspot
+        BODY.append(gridspot.obj)
+        console.log(profile)
 
         socket.send(JSON.stringify({
             type: "update_profile",
@@ -159,7 +314,7 @@ const packet_handlers = {
     },
     async update_profile(data) {
         if(data.id == profile.id) {
-            setprofile(data.name, data.icon)
+            setprofile(data.name, data.icon, true)
             return
         }
 
@@ -167,8 +322,8 @@ const packet_handlers = {
         peer.profile.name = data.name
         peer.profile.icon = data.icon
 
-        const li = document.getElementById(data.id)
-            li.textContent = data.name
+        peer.gridentry.name.textContent = data.name
+        peer.gridentry.icon.src = `/chatroom/img/icons/icon${data.icon}.png`
     },
 
     async offer(data) {
@@ -235,7 +390,51 @@ async function handlepacket(e) {
 }
 
 async function connect() {
-    stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+    setprofile(profile.name, profile.icon)
+
+    stream = 
+        await navigator.mediaDevices.getUserMedia(
+            { audio: {
+                autoGainControl: false,
+                echoCancellation: true,
+                noiseSuppression: true
+            } }, 
+        )
+    
+    let ctx = new AudioContext()
+    let source = ctx.createMediaStreamSource(stream)
+    let dest = ctx.createMediaStreamDestination()
+    
+    gainnode = ctx.createGain()
+    gainnode.gain.value = 3
+    source.connect(gainnode)
+    
+    analysernode = ctx.createAnalyser()
+    analysernode.fftSize = 1024
+    gainnode.connect(analysernode)
+    analysernode.connect(dest)
+
+    const bufferlength = analysernode.fftSize
+    const dataarray = new Float32Array(bufferlength)
+
+    function updatevolume() {
+        analysernode.getFloatTimeDomainData(dataarray)
+
+        let sum = 0
+        for(const val of dataarray) {
+            sum += val*val
+        }
+
+        localvolume = Math.sqrt(sum/bufferlength) * 5
+
+        if(profile.gridentry.volbarcover) {
+            profile.gridentry.volbarcover.style.height = `${(1-localvolume)*100}%`
+        }
+        requestAnimationFrame(updatevolume)
+    }
+    updatevolume()
+
+    stream = dest.stream
     
     socket = new WebSocket(CONNECT_ENDPOINT)
 
@@ -247,6 +446,7 @@ async function connect() {
     socket.addEventListener("message", handlepacket)
 }
 
-document.getElementById("activate").addEventListener("click", (e) => {
-    connect()
+document.getElementById("activate").addEventListener("click", async (e) => {
+    await connect()
+    document.getElementById("vc-blanker").remove()
 })
