@@ -11,21 +11,23 @@ const profile = {
 
     gridentry: {}
 }
-if(window.localStorage.getItem(PROFILE_STORAGE_KEY)) {
-    const data = JSON.parse(window.localStorage.getItem(PROFILE_STORAGE_KEY))
 
-    profile.name = data.name
-    profile.icon = data.icon
+function save() {
+    window.localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify({
+        name: profile.name,
+        icon: profile.icon,
+
+        input: INPUT_GAIN.value,
+        output: OUTPUT_GAIN.value
+    }))
+    console.log("saved")
 }
 
 function setprofile(name, icon, forced=false) {
     profile.name = name
     profile.icon = icon
 
-    window.localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify({
-        name: profile.name,
-        icon: profile.icon
-    }))
+    save()
 
     if(forced) {
         profile.gridentry.name.textContent = name
@@ -50,8 +52,8 @@ function sendprofiledata() {
     socket.send(JSON.stringify({
         type: "update_profile",
         data: {
-            name: profile.gridentry.name.textContent,
-            icon: parseInt(profile.gridentry.icon.getAttribute("iconid"))
+            name: profile.name,
+            icon: profile.icon
         }
     }))
 }
@@ -64,18 +66,27 @@ const DEAFEN_BUTTON = document.getElementById("deafen")
 const INPUT_GAIN = document.getElementById("inputgain")
 const OUTPUT_GAIN = document.getElementById("outputgain")
 
-INPUT_GAIN.addEventListener("input", (e) => {
+function setinput(value) {
     if(!stream) {
         return
     }
 
-    gainnode.gain.value = !muted ? INPUT_GAIN.value : 0
-})
-OUTPUT_GAIN.addEventListener("input", (e) => {
+    gainnode.gain.value = !muted ? value : 0
+}
+function setoutput(value) {
     for(const [id, peer] of peers) {
         console.log(id, peer)
-        peer.audio.volume = OUTPUT_GAIN.value
+        peer.audio.volume = value
     }
+}
+
+INPUT_GAIN.addEventListener("input", (e) => {
+    setinput(INPUT_GAIN.value)
+    save()
+})
+OUTPUT_GAIN.addEventListener("input", (e) => {
+    setoutput(OUTPUT_GAIN.value)
+    save()
 })
 
 let socket
@@ -211,6 +222,7 @@ class Peer {
 
         this.audio = new Audio()
         this.audio.autoplay = true
+        this.audio.volume = OUTPUT_GAIN.value
         this.stream = null
 
         // add to grid
@@ -368,12 +380,17 @@ const packet_handlers = {
             if(e.key === "Enter") {
                 e.preventDefault()
 
-                sendprofiledata()
+                profile.name = gridspot.name.textContent
+
                 setTimeout(() => {
                     gridspot.name.blur()
                 }, 0)
             }
         })
+        gridspot.name.addEventListener("focusout", (e) => {
+            sendprofiledata()
+        })
+
         gridspot.icon.addEventListener("click", (e) => {
             let lastid = parseInt(gridspot.icon.getAttribute("iconid"))
             flipicon()
@@ -396,6 +413,7 @@ const packet_handlers = {
     },
     async update_profile(data) {
         if(data.id == profile.id) {
+            console.log("we have been told our name")
             setprofile(data.name, data.icon, true)
             return
         }
@@ -521,8 +539,9 @@ async function handlepacket(e) {
 }
 
 async function connect() {
-    setprofile(profile.name, profile.icon)
+    const status = document.getElementById("status")
 
+    status.innerText = "getting microphone"
     stream = 
         await navigator.mediaDevices.getUserMedia(
             { audio: {
@@ -566,12 +585,30 @@ async function connect() {
     updatevolume()
 
     stream = dest.stream
+
+    if(window.localStorage.getItem(PROFILE_STORAGE_KEY)) {
+        status.innerText = "loading profile data..."
+        const data = JSON.parse(window.localStorage.getItem(PROFILE_STORAGE_KEY))
+        console.log(data)
+
+        profile.name = data.name
+        profile.icon = data.icon
+
+        setinput(data.input)
+        setoutput(data.output)
+    }
     
     socket = new WebSocket(CONNECT_ENDPOINT)
+    status.innerText = "waiting for server response..."
 
     await new Promise((resolve, reject) => {
         socket.addEventListener("open", resolve, { once: true })
-        socket.addEventListener("error", reject, { once: true })
+        socket.addEventListener("error", (r) => {
+            console.log(r)
+            status.innerText = `failed to establish connection to server...\ntry refreshing?`
+            
+            reject(r)
+        }, { once: true })
     })
 
     socket.addEventListener("message", handlepacket)
@@ -579,7 +616,16 @@ async function connect() {
 
 document.getElementById("activate").addEventListener("click", async (e) => {
     console.log("button hit")
+
+    const blanker = document.getElementById("vc-blanker")
+
+    blanker.replaceChildren()
+    let status = document.createElement("p")
+        status.id = "status"
+        status.innerText = "connecting..."
+    blanker.append(status)
+
     await connect()
     console.log("connected")
-    document.getElementById("vc-blanker").remove()
+    blanker.remove()
 })
