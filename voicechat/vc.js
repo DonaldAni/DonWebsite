@@ -481,6 +481,7 @@ const packet_handlers = {
 
     async ban(data) {
         alert(data.reason)
+        window.location.reload()
     },
     async system_message(data) {
         if(!'speechSynthesis' in window) {
