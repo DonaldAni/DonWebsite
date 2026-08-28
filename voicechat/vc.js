@@ -538,7 +538,6 @@ const packet_handlers = {
 
 async function handlepacket(e) {
     const packet = JSON.parse(e.data)
-    console.log(packet)
 
     if(!packet.type) {
         console.log("welp!")
