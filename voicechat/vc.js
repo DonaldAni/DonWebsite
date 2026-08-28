@@ -99,11 +99,16 @@ DEAFEN_BUTTON.addEventListener("click", (e) => {
         peer.audio.muted = deafened
     }
     
+    let soundsrc = "snd/deafen.ogg"
     let graphicsrc = "img/deafen.png"
     if(!deafened) {
+        soundsrc = "snd/undeafen.ogg"
         graphicsrc = "img/undeafen.png"
     }
 
+    const sound = new Audio(soundsrc)
+        sound.volume = .65
+        sound.play()
     DEAFEN_BUTTON.querySelector("img").src = graphicsrc
 })
 
