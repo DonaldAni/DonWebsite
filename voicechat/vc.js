@@ -172,7 +172,6 @@ class Peer {
 }
 
 const ACTIVATE_BUTTON = document.getElementById("activate")
-const AUDIO = document.getElementById("remote")
 
 async function makeconnection(user) {
     const conn = new RTCPeerConnection(config)
@@ -195,37 +194,39 @@ async function makeconnection(user) {
             }
         }))
     })
-    conn.addEventListener("track", (e) => {
-        // start tracking volume
-        let ctx = new AudioContext()
-        let source = ctx.createMediaStreamSource(e.streams[0])
-        let dest = ctx.createMediaStreamDestination()
+    conn.addEventListener("track", async (e) => {
+        const ctx = new AudioContext()
+        
+        peer.audio.srcObject = e.streams[0]
+        peer.audio.autoplay = true
 
-        let analysernode = ctx.createAnalyser()
-        analysernode.fftSize = 256
-        source.connect(analysernode)
-        analysernode.connect(dest)
+        const source = ctx.createMediaStreamSource(e.streams[0])
+            const analyser = ctx.createAnalyser()
+                analyser.fftSize = 512
+            source.connect(analyser)
 
-        const bufferlength = analysernode.fftSize
+        const bufferlength = analyser.fftSize
         const dataarray = new Float32Array(bufferlength)
 
         function updatevolume() {
-            analysernode.getFloatTimeDomainData(dataarray)
+            analyser.getFloatTimeDomainData(dataarray)
 
             let sum = 0
-            for(const val of dataarray) {
-                sum += val*val
+            for (const val of dataarray) {
+                sum += val * val
             }
 
-            let vol = Math.sqrt(sum/bufferlength) * 5
-            peer.gridentry.volbarcover.style.height = `${(1-vol)*100}%`
+            const vol = Math.sqrt(sum / bufferlength) * 5
+            peer.gridentry.volbarcover.style.height =
+                `${(1 - vol) * 100}%`
 
             requestAnimationFrame(updatevolume)
         }
         updatevolume()
 
-        peer.stream = dest.stream
-        peer.audio.srcObject = dest.stream
+        if (ctx.state === "suspended") {
+            await ctx.resume()
+        }
     })
 
     return peer
@@ -447,6 +448,8 @@ async function connect() {
 }
 
 document.getElementById("activate").addEventListener("click", async (e) => {
+    console.log("button hit")
     await connect()
+    console.log("connected")
     document.getElementById("vc-blanker").remove()
 })
