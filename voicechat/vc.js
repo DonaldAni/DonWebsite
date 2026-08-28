@@ -140,6 +140,10 @@ DEAFEN_BUTTON.addEventListener("click", (e) => {
     if(!deafened) {
         soundsrc = "snd/undeafen.ogg"
         graphicsrc = "img/undeafen.png"
+
+        profile.gridentry.iconcontainer.classList.remove("deafened")
+    } else {
+        profile.gridentry.iconcontainer.classList.add("deafened")
     }
 
     const sound = new Audio(soundsrc)
@@ -155,10 +159,14 @@ function makegridspot(user) {
         let vcPeerTop = document.createElement("div")
             vcPeerTop.className = "vc-peer-top"
 
-            let vcIcon = document.createElement("img")
-                vcIcon.className = "vc-icon"
-                vcIcon.src = `/chatroom/img/icons/icon${user.icon}.png`
-                vcIcon.setAttribute("iconid", user.icon)
+            let vcIconContainer = document.createElement("div")
+                vcIconContainer.className = "vc-icon-container"
+
+                let vcIcon = document.createElement("img")
+                    vcIcon.className = "vc-icon"
+                    vcIcon.src = `/chatroom/img/icons/icon${user.icon}.png`
+                    vcIcon.setAttribute("iconid", user.icon)
+                vcIconContainer.append(vcIcon)
 
             let vcVolbar = document.createElement("div")
                 vcVolbar.className = "vc-volbar"
@@ -167,7 +175,7 @@ function makegridspot(user) {
                     vcVolbarCover.className = "vc-volbar-cover"
                 
                 vcVolbar.append(vcVolbarCover)
-            vcPeerTop.append(vcIcon, vcVolbar)
+            vcPeerTop.append(vcIconContainer, vcVolbar)
         
         let vcName = document.createElement("p")
             vcName.contentEditable = false
@@ -181,6 +189,7 @@ function makegridspot(user) {
 
         name: vcName,
         icon: vcIcon,
+        iconcontainer: vcIconContainer,
         volbar: vcVolbar,
         volbarcover: vcVolbarCover
     }
@@ -208,6 +217,13 @@ class Peer {
         const gridspot = makegridspot(user)
         this.gridentry = gridspot
         BODY.append(gridspot.obj)
+
+        if(user.muted) {
+            this.gridentry.volbarcover.style.backgroundColor = "red"
+        }
+        if(user.deafened) {
+            this.gridentry.iconcontainer.classList.add("deafened")
+        }
     }
 
     async dispatchbacklog() {
@@ -302,6 +318,9 @@ const packet_handlers = {
             // special user
             dcsound += "-special"
         }
+        if(data.banned) {
+            dcsound = "banned"
+        }
 
         const sound = new Audio(`snd/${dcsound}.ogg`)
             sound.volume = .65
@@ -321,6 +340,7 @@ const packet_handlers = {
             }
 
             const peer = await makeconnection(user)
+            peer.profile.changed = true // dont let them play the join sound
             peers.set(id, peer)
 
             await peer.conn.setLocalDescription(
@@ -342,7 +362,7 @@ const packet_handlers = {
         gridspot.name.style.color = "#006c86"
         gridspot.name.style.fontStyle = "italic"
         gridspot.name.style.textDecoration = "underline"
-        gridspot.icon.classList.add("vc-clickable")
+        gridspot.iconcontainer.classList.add("vc-clickable")
 
         gridspot.name.addEventListener("keydown", (e) => {
             if(e.key === "Enter") {
@@ -451,7 +471,12 @@ const packet_handlers = {
         peer.gridentry.volbarcover.style.backgroundColor = data.muted ? "red" : "black"
     },
     async deafen(data) {
-        // todo
+        const peer = peers.get(data.id)
+        if(data.deafened) {
+            peer.gridentry.iconcontainer.classList.add("deafened")
+        } else {
+            peer.gridentry.iconcontainer.classList.remove("deafened")
+        }
     }
 }
 
