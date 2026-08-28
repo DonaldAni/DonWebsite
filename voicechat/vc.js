@@ -77,17 +77,27 @@ MUTE_BUTTON.addEventListener("click", (e) => {
     muted = !muted
     gainnode.gain.value = !muted ? INPUT_GAIN.value : 0
 
+    socket.send(JSON.stringify({
+        type: "mute",
+        data: {
+            muted: muted
+        }
+    }))
+
     let soundsrc = "snd/mute.ogg"
     let graphicsrc = "img/mute.png"
+    let covercolor = "red"
     if(!muted) {
         soundsrc = "snd/unmute.ogg"
         graphicsrc = "img/unmute.png"
+        covercolor = "black"
     }
 
     const sound = new Audio(soundsrc)
         sound.volume = .65
         sound.play()
     MUTE_BUTTON.querySelector("img").src = graphicsrc
+    profile.gridentry.volbarcover.style.backgroundColor = covercolor
 })
 DEAFEN_BUTTON.addEventListener("click", (e) => {
     if(!stream) {
@@ -98,6 +108,13 @@ DEAFEN_BUTTON.addEventListener("click", (e) => {
     for(const peer of peers.values()) {
         peer.audio.muted = deafened
     }
+
+    socket.send(JSON.stringify({
+        type: "deafen",
+        data: {
+            deafened: deafened
+        }
+    }))
     
     let soundsrc = "snd/deafen.ogg"
     let graphicsrc = "img/deafen.png"
@@ -247,6 +264,10 @@ const packet_handlers = {
         // we dont really care about this... all the stuff goes in the handshake
         console.log("ok")
         console.log(data)
+
+        const sound = new Audio("snd/connect.ogg")
+            sound.volume = .65
+            sound.play()
     },
     async user_disconnected(data) {
         const peer = peers.get(data.user.id)
@@ -258,6 +279,10 @@ const packet_handlers = {
         peer.conn.close()
         peer.gridentry.obj.remove()
         peers.delete(data.user.id)
+
+        const sound = new Audio("snd/disconnect.ogg")
+            sound.volume = .65
+            sound.play()
     },
 
     async room_info(data) {
@@ -381,6 +406,14 @@ const packet_handlers = {
         // technically this will never dispatch the backlog if it is busy the entire time but sucks to suck
         await peer.dispatchbacklog()
         await peer.conn.addIceCandidate(data.candidate)
+    },
+
+    async mute(data) {
+        const peer = peers.get(data.id)
+        peer.gridentry.volbarcover.style.backgroundColor = data.muted ? "red" : "black"
+    },
+    async deafen(data) {
+        // todo
     }
 }
 
