@@ -58,6 +58,12 @@ INPUT_GAIN.addEventListener("input", (e) => {
 
     gainnode.gain.value = !muted ? INPUT_GAIN.value : 0
 })
+OUTPUT_GAIN.addEventListener("input", (e) => {
+    for(const [id, peer] of peers) {
+        console.log(id, peer)
+        peer.audio.volume = OUTPUT_GAIN.value
+    }
+})
 
 let socket
 
