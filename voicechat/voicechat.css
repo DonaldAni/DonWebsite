@@ -70,6 +70,9 @@ body {
 
     border-radius: 4px;
     border: 2px solid #2d4a88;
+
+    user-select: none;
+    -moz-user-select: none;
 }
 
 .vc-volbar {
@@ -103,6 +106,9 @@ body {
 
     font-size: 150%;
     font-family: "comic sans";
+
+    user-select: none;
+    -moz-user-select: none;
 }
 
 #vc-sidebar {
@@ -145,6 +151,9 @@ body {
     height: 100%;
 
     filter: drop-shadow(4px 4px 2px rgba(0,0,0,.25));
+
+    user-select: none;
+    -moz-user-select: none;
 }
 
 .vc-clickable {
@@ -204,6 +213,9 @@ body {
 }
 .vc-control-gain > p {
     font-family: "comic sans";
+
+    user-select: none;
+    -moz-user-select: none;
 }
 
 input[type="range"] {
