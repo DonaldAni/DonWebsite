@@ -236,6 +236,63 @@ class Peer {
         if(user.deafened) {
             this.gridentry.iconcontainer.classList.add("deafened")
         }
+
+        this.setupconnection()
+    }
+
+    setupconnection() {
+        for(const track of stream.getTracks()) {
+            this.conn.addTrack(track, stream)
+        }
+
+        this.conn.addEventListener("icecandidate", (e) => {
+            if(!e.candidate) {
+                return
+            }
+
+            socket.send(JSON.stringify({
+                type: "ice_candidate",
+                data: {
+                    to: this.id,
+                    candidate: e.candidate
+                }
+            }))
+        })
+        this.conn.addEventListener("track", async (e) => {
+            const ctx = new AudioContext()
+            
+            this.audio.srcObject = e.streams[0]
+            this.audio.autoplay = true
+
+            const source = ctx.createMediaStreamSource(e.streams[0])
+                const analyser = ctx.createAnalyser()
+                    analyser.fftSize = 512
+                source.connect(analyser)
+
+            const bufferlength = analyser.fftSize
+            const dataarray = new Float32Array(bufferlength)
+
+            const updatevolume = () => {
+                analyser.getFloatTimeDomainData(dataarray)
+
+                let sum = 0
+                for (const val of dataarray) {
+                    sum += val * val
+                }
+
+                const vol = Math.sqrt(sum / bufferlength) * 5
+                console.log(this)
+                this.gridentry.volbarcover.style.height =
+                    `${(1 - vol) * 100}%`
+
+                requestAnimationFrame(updatevolume)
+            }
+            updatevolume()
+
+            if (ctx.state === "suspended") {
+                await ctx.resume()
+            }
+        })
     }
 
     async dispatchbacklog() {
@@ -245,6 +302,46 @@ class Peer {
 
         this.candidatebacklog = []
     }
+
+    async addicecandidate(candidate) {
+        if(!this.conn.remoteDescription) {
+            this.candidatebacklog.push(candidate)
+            return
+        }
+
+        // technically this will never dispatch the backlog if it is busy the entire time but sucks to suck
+        await this.dispatchbacklog()
+        await this.conn.addIceCandidate(candidate)
+    }
+
+    updateprofile(name, icon) {
+        this.profile.name = name
+        this.profile.icon = icon
+
+        if(!this.profile.changed) {
+            console.log("first change!")
+
+            let csound = "connect"
+            if(this.profile.icon < 0) {
+                // special user
+                csound += "-special"
+            }
+
+            const sound = new Audio(`snd/${csound}.ogg`)
+                sound.volume = .65
+                sound.play()
+        }
+        this.profile.changed = true
+
+        this.gridentry.name.textContent = name
+        this.gridentry.icon.src = `/chatroom/img/icons/icon${icon}.png`
+    }
+
+    destroy() {
+        this.conn.close()
+        this.audio.srcObject = null
+        this.gridentry.obj.remove()
+    }
 }
 
 const ACTIVATE_BUTTON = document.getElementById("activate")
@@ -252,58 +349,6 @@ const ACTIVATE_BUTTON = document.getElementById("activate")
 async function makeconnection(user) {
     const conn = new RTCPeerConnection(config)
     const peer = new Peer(user, conn)
-
-    for(const track of stream.getTracks()) {
-        conn.addTrack(track, stream)
-    }
-
-    conn.addEventListener("icecandidate", (e) => {
-        if(!e.candidate) {
-            return
-        }
-
-        socket.send(JSON.stringify({
-            type: "ice_candidate",
-            data: {
-                to: user.id,
-                candidate: e.candidate
-            }
-        }))
-    })
-    conn.addEventListener("track", async (e) => {
-        const ctx = new AudioContext()
-        
-        peer.audio.srcObject = e.streams[0]
-        peer.audio.autoplay = true
-
-        const source = ctx.createMediaStreamSource(e.streams[0])
-            const analyser = ctx.createAnalyser()
-                analyser.fftSize = 512
-            source.connect(analyser)
-
-        const bufferlength = analyser.fftSize
-        const dataarray = new Float32Array(bufferlength)
-
-        function updatevolume() {
-            analyser.getFloatTimeDomainData(dataarray)
-
-            let sum = 0
-            for (const val of dataarray) {
-                sum += val * val
-            }
-
-            const vol = Math.sqrt(sum / bufferlength) * 5
-            peer.gridentry.volbarcover.style.height =
-                `${(1 - vol) * 100}%`
-
-            requestAnimationFrame(updatevolume)
-        }
-        updatevolume()
-
-        if (ctx.state === "suspended") {
-            await ctx.resume()
-        }
-    })
 
     return peer
 }
@@ -321,8 +366,7 @@ const packet_handlers = {
             return
         }
 
-        peer.conn.close()
-        peer.gridentry.obj.remove()
+        peer.destroy()
         peers.delete(data.user.id)
 
         let dcsound = "disconnect"
@@ -419,26 +463,7 @@ const packet_handlers = {
         }
 
         const peer = peers.get(data.id)
-        peer.profile.name = data.name
-        peer.profile.icon = data.icon
-
-        if(!peer.profile.changed) {
-            console.log("first change!")
-
-            let csound = "connect"
-            if(peer.profile.icon < 0) {
-                // special user
-                csound += "-special"
-            }
-
-            const sound = new Audio(`snd/${csound}.ogg`)
-                sound.volume = .65
-                sound.play()
-        }
-        peer.profile.changed = true
-
-        peer.gridentry.name.textContent = data.name
-        peer.gridentry.icon.src = `/chatroom/img/icons/icon${data.icon}.png`
+        peer.updateprofile(data.name, data.icon)
     },
 
     async offer(data) {
@@ -474,14 +499,7 @@ const packet_handlers = {
             return
         }
 
-        if(!peer.conn.remoteDescription) {
-            peer.candidatebacklog.push(data.candidate)
-            return
-        }
-
-        // technically this will never dispatch the backlog if it is busy the entire time but sucks to suck
-        await peer.dispatchbacklog()
-        await peer.conn.addIceCandidate(data.candidate)
+        peer.addicecandidate(data.candidate)
     },
 
     async mute(data) {
