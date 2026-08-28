@@ -77,11 +77,16 @@ MUTE_BUTTON.addEventListener("click", (e) => {
     muted = !muted
     gainnode.gain.value = !muted ? INPUT_GAIN.value : 0
 
+    let soundsrc = "snd/mute.ogg"
     let graphicsrc = "img/mute.png"
     if(!muted) {
+        soundsrc = "snd/unmute.ogg"
         graphicsrc = "img/unmute.png"
     }
 
+    const sound = new Audio(soundsrc)
+        sound.volume = .65
+        sound.play()
     MUTE_BUTTON.querySelector("img").src = graphicsrc
 })
 DEAFEN_BUTTON.addEventListener("click", (e) => {

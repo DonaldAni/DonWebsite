@@ -213,6 +213,7 @@ input[type="range"] {
 
     -webkit-appearance: none;
     appearance: none;
+    background: transparent;
 }
 input[type="range"]:focus {
     outline: none;
@@ -220,21 +221,28 @@ input[type="range"]:focus {
 
 input[type="range"]::-webkit-slider-runnable-track, input[type="range"]::-moz-range-track {
     background: #2d4a88;
+    box-shadow: inset 4px 0px 4px rgba(255, 255, 255, 0.35);
     width: 15px;
     border-radius: 4px;
 }
 input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb {
     -webkit-appearance: none;
     height: 25px;
-    width: 15px;
+    width: 20px;
     background: white;
     border: none;
+    
+    background: white;
     background-image: url("img/slidergrip.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    
     border-radius: 2px;
     /* margin-top: -5px; */
 }
 input[type="range"]::-moz-range-progress {
     background-color: #3380e4;
+    box-shadow: inset 4px 0px 4px rgba(255, 255, 255, 0.35);
     width: 100%;
     border-radius: 4px;
 }
