@@ -281,6 +281,9 @@ const packet_handlers = {
         // add to grid
         const gridspot = makegridspot(profile)
         gridspot.name.contentEditable = true
+        gridspot.name.style.color = "#006c86"
+        gridspot.name.style.fontStyle = "italic"
+        gridspot.name.style.textDecoration = "underline"
         gridspot.icon.classList.add("vc-clickable")
 
         gridspot.name.addEventListener("keydown", (e) => {
