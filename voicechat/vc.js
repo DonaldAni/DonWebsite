@@ -281,7 +281,6 @@ class Peer {
                 }
 
                 const vol = Math.sqrt(sum / bufferlength) * 5
-                console.log(this)
                 this.gridentry.volbarcover.style.height =
                     `${(1 - vol) * 100}%`
 
