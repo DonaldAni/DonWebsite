@@ -1,20 +1,21 @@
-class Social {
-    constructor(img, link) {
+class TopbarEntry {
+    constructor(img, link, social=false) {
         this.img = img
         this.link = link
+        this.social = social
     }
 }
 
 // social links
 let toadd = [
-    new Social("home", "/home"),
-    new Social("twitter", "https://x.com/DonaldAni1010"),
-    new Social("youtube", "https://www.youtube.com/@donaldani10/videos"),
-    new Social("roblox", "https://www.roblox.com/users/349593445/profile"),
-    new Social("comms", "https://donaldani.com"),
-    new Social("games", "/games/runner"),
-    new Social("ask", "/questions"),
-    new Social("chat", "/chatroom")
+    new TopbarEntry("home", "/home"),
+    new TopbarEntry("twitter", "https://x.com/DonaldAni1010", true),
+    new TopbarEntry("youtube", "https://www.youtube.com/@donaldani10/videos", true),
+    new TopbarEntry("roblox", "https://www.roblox.com/users/349593445/profile", true),
+    new TopbarEntry("comms", "https://donaldani.com"),
+    new TopbarEntry("games", "/games/runner"),
+    new TopbarEntry("ask", "/questions"),
+    new TopbarEntry("chat", "/chatroom")
 ]
 
 // marquee texts
@@ -90,14 +91,15 @@ let canpick = [
     'be a pal, <a target="_blank" href="https://donaldapi.kayladotcom.org/philads/implementing.html">support philads</a>',
     'now with lerping functionality',
     'would you still love me if i was <span style="color: #93C44D">Made With GameMaker: Studio</span>',
-    'the only portfolio website with an API backend'
+    'the only portfolio website with an API backend',
+    'fart mode: <span style="color: red;">FALSE</span>'
 ]
 
 var hoversound = document.createElement("audio")
 hoversound.src = "/shared/sound/hover.wav"
 hoversound.volume = 0.4
 document.body.appendChild(hoversound)
-class SocialLink extends HTMLElement {
+class TopbarItem extends HTMLElement {
     connectedCallback() {
         const img = this.getAttribute("img")
         const link = this.getAttribute("link")
@@ -128,7 +130,7 @@ class SocialLink extends HTMLElement {
         this.appendChild(ael)
     }
 }
-customElements.define("social-link", SocialLink)
+customElements.define("topbar-item", TopbarItem)
 
 class TopBar extends HTMLElement {
     connectedCallback() {
@@ -167,11 +169,11 @@ document.body.prepend(topbar)
 let topbaricons = document.getElementById("topbaricons")
 
 for(social of toadd) {
-    let sociallink = document.createElement("social-link")
-    sociallink.setAttribute("img", social.img)
-    sociallink.setAttribute("link", social.link)
+    let item = document.createElement("topbar-item")
+    item.setAttribute("img", social.img)
+    item.setAttribute("link", social.link)
 
-    topbaricons.appendChild(sociallink)
+    topbaricons.appendChild(item)
 }
 
 document.documentElement.lang = "en" // zalgo text makes it think its vietnamese
