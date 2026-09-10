@@ -1,6 +1,9 @@
 html {
     background-color: black;
 }
+html::before {
+    background: black;
+}
 body, #marq {
     background-image: none;
     background-color: black;
@@ -9,10 +12,17 @@ body, #marq {
     overflow: hidden;
     font-family: monospace;
 }
+body {
+    display: flex;
+        flex-direction: column;
+        align-items: center;
+}
 
 h1 {
     -webkit-text-stroke: 0px;
     font-family: monospace;
+
+    margin-bottom: 0;
 }
 
 #topbaricons {
@@ -22,6 +32,8 @@ h1 {
 #chatroomroot {
     width: 80rem;
     height: 40rem;
+
+    max-width: 100vw;
     
     background-color: black;
     font-family: monospace;
@@ -30,7 +42,7 @@ h1 {
     border: 2px solid lime;
     
     display: flex;
-    flex-direction: column;
+        flex-direction: column;
 }
 #downnotice {
     margin-top: 10%;
@@ -146,7 +158,6 @@ h1 {
     height: 15%;
     
     display: flex;
-    
 }
 
 #chatroominputroot {
@@ -194,6 +205,8 @@ h1 {
     border: 1px dashed lime;
     
     font-family: monospace;
+
+    max-width: 90%;
 }
 #chatroomnameinput::placeholder {
     color: green;

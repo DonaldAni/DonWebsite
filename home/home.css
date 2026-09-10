@@ -16,18 +16,23 @@
 
 img.darcywave {
     /* shadow behind the waving gif */
-    filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.377))
-}
-img.kaylabutton {
-    width: 20vw;
-    transition: filter 0.25s ease, transform 0.25s ease;
+    filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.377));
+    max-width: 100%;
 }
 img.kaylabutton:hover {
     transform: scale(1.1,1.1)
 }
+div.kaylabutton {
+    display: grid;
+        place-items: center;
+
+    width: 100%;
+}
 img.kaylabutton {
-  width: 469px;
-  height: 400px;
+    max-width: 40vh;
+    max-height: 40vh;
+    object-fit: contain;
+    transition: filter 0.25s ease, transform 0.25s ease;
 }
 /* i just wanna make it known, this proccess was terrible and i wish i could just use html LOL */
 
@@ -71,4 +76,21 @@ ul {
     text-align: left;
     margin: 0;
     padding: 0;
+}
+
+@media (max-width: 1000px) {
+    .statuscontainer {
+        position:unset;
+
+        margin: 5%;
+    }
+
+    .slideup {
+        left: unset;
+        position: fixed;
+            right: 5%;
+
+        min-width: 30%;
+        max-width: 60%;
+    }
 }

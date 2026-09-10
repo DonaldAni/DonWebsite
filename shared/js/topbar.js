@@ -134,8 +134,11 @@ class TopBar extends HTMLElement {
     connectedCallback() {
         this.outerHTML = `
         <div class="topbar" id="topbar">
-            
-            <div class="topbaricons" id="topbaricons"></div>
+            <div class="topbaricons" id="topbaricons">
+                <input type="checkbox" id="hamburgerbutton">
+                <label id="hamburgerlabel" for="hamburgerbutton"><img src="/shared/img/socials/hamburger.gif"></label>
+                <div id="realicons"></div>
+            </div>
 
             <div class="scrollingcontainer">
                 <marquee id="marq" scrollamount="8">
@@ -143,8 +146,6 @@ class TopBar extends HTMLElement {
                 </marquee>
             </div>
         </div>
-        <br><br><br>
-
         `
 
         let marq = document.getElementById("marq")
@@ -164,7 +165,7 @@ document.head.appendChild(style)
 let topbar = document.createElement("top-bar")
 document.body.prepend(topbar)
 
-let topbaricons = document.getElementById("topbaricons")
+let topbaricons = document.getElementById("realicons")
 
 for(social of toadd) {
     let sociallink = document.createElement("social-link")
