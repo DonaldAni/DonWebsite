@@ -34,6 +34,13 @@
         justify-content: center;
 }
 
+.mobileaddiv {
+    display: none;
+}
+.mobileaddiv > phil-ad > a > img {
+    max-width: 90vw;
+}
+
 phil-ad {
     filter: drop-shadow(4px 4px 8px black)
 }
@@ -48,7 +55,14 @@ phil-ad {
     .addivvertright {
         display: none;
     }
+
+    .mobileaddiv {
+        display: flex;
+            align-items: center;
+            justify-content: center;
+    }
+
     phil-ad {
-        display: none;
+        /* display: none; */
     }
 }
