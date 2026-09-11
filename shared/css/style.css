@@ -5,13 +5,32 @@
 @import "fonts.css";
 @import "ads.css";
 
+html, body {
+    /* overscroll-behavior: none; */
+}
+
 html {
     /* filter: hue-rotate(-20deg); */ /* its not spring anymore. */
+    margin: 0;
+    padding: 0;
+}
+html::before {
+    content: "";
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(rgb(255, 255, 255), rgb(255, 174, 107));
+    z-index: -1;
 }
 
 body {
-    background-image: linear-gradient(rgb(255, 255, 255), rgb(255, 174, 107));
-    background-attachment: fixed; /* prevents gradient from scrolling! hoho! */ 
+    background: transparent;
+    margin: 0;
+    padding: 0;
+    /* background-attachment: scroll; */
     height: 100%;
     justify-items: center;
 
@@ -24,10 +43,7 @@ body {
     font-family: "comic sans";
     font-size: 20px;
 
-    /* how far away from the edges the content should be */
-    margin-left: 15vw;
-    margin-right: 15vw;
-
+    margin: 0;
     margin-bottom: 25%;
 
     /* cursor: url('img/cursor.gif'), auto; */
@@ -57,4 +73,9 @@ hr {
     /* makes the horizontal line a bit shorter */
     width: 60%;
     color: black;
+}
+
+body > p {
+    margin-left: 15vw;
+    margin-right: 15vw;
 }

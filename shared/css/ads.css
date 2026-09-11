@@ -37,3 +37,18 @@
 phil-ad {
     filter: drop-shadow(4px 4px 8px black)
 }
+
+@media (max-width: 1000px) {
+    .addivhori {
+        display: none;
+    }
+    .addivvertleft {
+        display: none;
+    }
+    .addivvertright {
+        display: none;
+    }
+    phil-ad {
+        display: none;
+    }
+}

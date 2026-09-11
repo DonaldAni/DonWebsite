@@ -24,6 +24,7 @@
         <meta name="twitter:image:src" content="/shared/img/embed.gif">
         <meta name="theme-color" content="#f07e1a">
 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             .date {
                 color: rgb(66, 0, 128);
@@ -56,6 +57,16 @@
                 display: flex;
                     flex-direction: column;
                     align-items: center;
+            }
+
+            body {
+                height: unset;
+            }
+
+            @media (max-width: 1000px) {
+                ul {
+                    width: 80%;
+                }
             }
         </style>
     </head>

@@ -1,30 +1,43 @@
 @import "fonts.css";
 
 .topbar {
-    position: fixed;
+    position: sticky;
     top: 0vh;
-    bottom: 92vh;
     left: 0vw;
-    right: 0vw;
+    height: 8vh;
+    width: 100%;
     
     z-index: 100000;
 
     background-color: #00000080;
     backdrop-filter: blur(5px);
     border-bottom: 5px solid black;
+    box-sizing: border-box;
+
+    display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: row;
 }
 
 .topbaricons {
-    position:absolute;
-    left: 0%;
-    right: 30vw;
-    top: 0vw;
-    bottom: 0vw;
+    height: 100%;
+    max-width: 70%;
+    min-width: 70%;
 
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+}
+#realicons {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
 }
 .topbaricon {
     height: 5vh;
@@ -38,20 +51,18 @@
 }
 
 .scrollingcontainer {
-    position:absolute;
-    left: 70%;
-    right: 0vw;
-    top: 0vw;
-    bottom: 0vw;
+    height: 100%;
+    min-width: 30%;
+    flex-grow: 1;
 
     background-color: black;
     border-left: 5px solid black;
     box-sizing: border-box;
 
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    text-align: center;
+        flex-direction: row;
+        justify-content: center;
+        text-align: center;
 
     color: rgb(255, 102, 0);
 
@@ -69,4 +80,83 @@
 
 #marq {
     font-size: 165%;
+}
+
+#realicons {
+    display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+}
+
+#hamburgerlabel {
+    display: none;
+}
+#hamburgerbutton {
+    display: none;
+}
+@media (max-width: 1000px) {
+    #topbaricons {
+        min-width: auto;
+        max-width: auto;
+        height: 100%;
+        aspect-ratio: 1;
+    }
+
+    #hamburgerlabel {
+        display: flex;
+            align-items: center;
+            justify-content: center;
+        padding: 10%;
+        height: 80%;
+    }
+    #hamburgerlabel > img {
+        width: 100%;
+        height: 100%;
+    }
+
+    #hamburgerbutton {
+        display: inline;
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    #hamburgerbutton:checked + #hamburgerlabel {
+        transform: scale(1.1);
+    }
+
+    #realicons {
+        position: absolute;
+            left: -45vw;
+            top: 8vh;
+            width: 45vw;
+            height: 92vh;
+
+        display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 1%;
+        
+        padding-top: 5%;
+        background-color: #00000080;
+        backdrop-filter: brightness(200%);
+        border-right: 5px solid black;
+        box-sizing: border-box;
+
+        transition: transform 0.25s ease;
+    }
+    .topbaricon {
+        max-width: 30vw;
+        max-height: 10vh;
+
+        object-fit: contain;
+        cursor: pointer;
+    }
+
+    #hamburgerbutton:checked ~ div {
+        transform: translateX(100%);
+    }
 }
