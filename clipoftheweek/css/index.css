@@ -17,6 +17,10 @@
 @media (max-width: 654px) {
     #cardcontainer {
         grid-template-columns: repeat(auto-fit, 100%);
+
+        padding-left: 5%;
+        padding-right: 5%;
+        box-sizing: border-box;
     }
 }
 
