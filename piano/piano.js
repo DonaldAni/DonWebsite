@@ -14,7 +14,10 @@ const canplay = [
     "sound/piano7.mp3",
     "sound/piano8.mp3",
     "sound/piano9.mp3",
-    "sound/piano10.mp3"
+    "sound/piano10.mp3",
+    "sound/piano11.mp3",
+    "sound/piano12.mp3",
+    "sound/piano13.mp3"
 ]
 
 const songnames = [
@@ -27,7 +30,10 @@ const songnames = [
     "Beautiful Boy",
     "Seizure",
     "Movin' Out",
-    "Beebo's Theme"
+    "Beebo's Theme",
+    "Enjoy Your Stay",
+    "Eight Melodies (Mother 1)",
+    "Eight Melodies (Mother 2/Earthbound)"
 ]
 
 function toggleplay() {
