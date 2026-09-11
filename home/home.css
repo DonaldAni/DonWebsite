@@ -45,7 +45,7 @@ img.kaylabutton {
     left: 70%;
     right: 5%;
     top: 93%;
-    bottom: -65%;
+    min-height: 50vh;
 
     margin: 0;
     padding: 0;
@@ -55,7 +55,7 @@ img.kaylabutton {
 }
 
 .slideup:hover {
-    transform: translate(0,-80%);
+    transform: translate(0,calc(-100% + 67px));
 }
 
 .secretpanel {
