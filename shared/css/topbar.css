@@ -52,7 +52,7 @@
 
 .scrollingcontainer {
     height: 100%;
-    width: 30%;
+    min-width: 30%;
     flex-grow: 1;
 
     background-color: black;
