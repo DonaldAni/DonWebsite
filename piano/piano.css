@@ -130,4 +130,8 @@ body {
     p.songname {
         margin: 0;
     }
+
+    #pianocontainer {
+        padding-top: 8vh;
+    }
 }
