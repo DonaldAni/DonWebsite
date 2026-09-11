@@ -89,6 +89,7 @@ ul {
         left: unset;
         position: fixed;
             right: 5%;
+            top: 93%;
 
         min-width: 30%;
         max-width: 60%;
