@@ -2,6 +2,7 @@ var piano = document.getElementById("piano")
 var songname = document.getElementById("songname")
 
 var playing = false
+let curplaybutton = null
 var audio = document.createElement("audio")
 
 const canplay = [
@@ -17,7 +18,8 @@ const canplay = [
     "sound/piano10.mp3",
     "sound/piano11.mp3",
     "sound/piano12.mp3",
-    "sound/piano13.mp3"
+    "sound/piano13.mp3",
+    "sound/piano14.mp3"
 ]
 
 const songnames = [
@@ -33,24 +35,115 @@ const songnames = [
     "Beebo's Theme",
     "Enjoy Your Stay",
     "Eight Melodies (Mother 1)",
-    "Eight Melodies (Mother 2/Earthbound)"
+    "Eight Melodies (Mother 2/Earthbound)",
+    "A WAY OUT"
 ]
 
+const serieses = [
+    "exe",
+    "fnffd",
+    "fnffd",
+    "misc",
+    "misc",
+    "fnffd",
+    "misc",
+    "misc",
+    "misc",
+    "r64",
+    "mother",
+    "mother",
+    "mother",
+    "awayout"
+]
+
+function populatesonglist() {
+    const SONG_LIST = document.getElementById("songlist")
+
+    let i = 0
+    for(const songname of songnames) {
+        console.log(songname)
+        /*
+        <div class="songentry">
+            <div class="playcontainer">
+                <img src="img/play.png">
+            </div>
+            <div class="songdetails">
+                <p>aahghh</p>
+            </div>
+        </div>
+        <div class="separator"></div>
+        */
+
+        let songentry = document.createElement("div")
+            songentry.id = i
+            songentry.className = "songentry"
+
+            let playcontainer = document.createElement("div")
+                playcontainer.className = "playcontainer"
+
+                let playbutton = document.createElement("img")
+                    playbutton.src = "img/play.png"
+
+                    const ii = i
+                    playbutton.addEventListener("click", function() {
+                        console.log(ii)
+                        play(ii)
+                    })
+                playcontainer.append(playbutton)
+
+            let songdetails = document.createElement("div")
+                songdetails.className = "songdetails"
+
+                let songicon = document.createElement("img")
+                    songicon.src = `img/icons/${serieses[i]}.png`
+                let songtitle = document.createElement("p")
+                    songtitle.innerText = songname
+
+                songdetails.append(songicon,songtitle)
+            
+            songentry.append(playcontainer, songdetails)
+        SONG_LIST.append(songentry)
+   
+        i++
+        if(i != songnames.length) {
+            let separator = document.createElement("div")
+                separator.className = "separator"
+            SONG_LIST.append(separator)
+        }
+    }
+}
+populatesonglist()
+
+function play(idx) {
+    let songentry = document.getElementById(idx.toString())
+    let playbutton = songentry.getElementsByTagName("img")[0]
+
+    if(playbutton != curplaybutton && curplaybutton) {
+        playing = false
+        curplaybutton.src = "img/play.png"
+    }
+    curplaybutton = playbutton
+    
+    var songidx = idx
+
+    audio.src = canplay[songidx]
+
+    songname.style.color = "white"
+    songname.innerHTML = `<i>"${songnames[songidx]}"</i>`
+
+    toggleplay()
+}
 function toggleplay() {
     playing = !playing
 
     if(playing) {
         piano.src = "img/piano.gif"
-        
-        var songidx = Math.floor(Math.random() * canplay.length)
+        curplaybutton.src = "img/pause.png"
 
-        audio.src = canplay[songidx]
         audio.play()
-
-        songname.style.color = "white"
-        songname.innerHTML = `<i>"${songnames[songidx]}"</i>`
     } else {
         piano.src = "img/piano.png"
+        curplaybutton.src = "img/play.png"
 
         audio.pause()
         audio.currentTime = 0
@@ -59,7 +152,4 @@ function toggleplay() {
     }
 }
 
-
-
-piano.addEventListener('click', toggleplay) 
 audio.addEventListener('ended', toggleplay)
