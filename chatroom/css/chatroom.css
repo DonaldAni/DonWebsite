@@ -241,3 +241,9 @@ h1 {
 phil-ad {
     border: 2px solid lime;
 }
+
+@media (max-width: 1000px) {
+    .addivvertright {
+        display: none;
+    }
+}
