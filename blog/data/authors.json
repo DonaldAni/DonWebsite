@@ -1,0 +1,18 @@
+{
+    "don": {
+        "icon": "don.png",
+        "displayname": "Donald",
+        "color": "#ff6600"
+    },
+    "darcy": {
+        "icon": "darcy.png",
+        "displayname": "Darcy",
+        "color": "#ff6600"
+    },
+    
+    "kayla": {
+        "icon": "kayla.png",
+        "displayname": "Kayla",
+        "color": "#ff71a0"
+    }
+}

@@ -12,6 +12,9 @@
     text-align: left;
     padding-left: 35px;
     color: rgb(31, 31, 32);
+
+    padding: 2rem;
+    box-sizing: border-box;
 }
 
 img.darcywave {
@@ -62,6 +65,10 @@ img.kaylabutton {
     background-color: #6D7084;
     width: 100%;
     height: 100%;
+
+    border-left: 6px solid black;
+    border-right: 6px solid black;
+    box-sizing: border-box;
 }
 .secretinput {
     width: 70%;
