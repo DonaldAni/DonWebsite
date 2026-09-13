@@ -100,7 +100,6 @@
 @media (max-width: 1000px) {
     #topbaricons {
         min-width: auto;
-        max-width: auto;
         height: 100%;
         aspect-ratio: 1;
     }

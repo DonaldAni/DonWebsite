@@ -67,11 +67,11 @@ function makeblog(blogdata) {
                 let blogpreviewtext = document.createElement("p")
                     blogpreviewtext.innerText = blogdata.previewtext
 
-                let blogpreviewreadmore = document.createElement("a")
+                let blogpreviewreadmore = document.createElement("p")
                     blogpreviewreadmore.className = "blogpreviewreadmore"
-                    blogpreviewreadmore.href = blogdata.path
 
-                    let blogpreviewreadmoretext = document.createElement("p")
+                    let blogpreviewreadmoretext = document.createElement("a")
+                        blogpreviewreadmoretext.href = blogdata.path
                         blogpreviewreadmoretext.innerText = "Read More >>"
 
                 blogpreviewreadmore.append(blogpreviewreadmoretext)

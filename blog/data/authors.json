@@ -1,8 +1,8 @@
 {
     "don": {
-        "icon": "don.png",
+        "icon": "donald.png",
         "displayname": "Donald",
-        "color": "#ff6600"
+        "color": "#0000ff"
     },
     "darcy": {
         "icon": "darcy.png",
