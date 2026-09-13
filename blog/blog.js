@@ -36,7 +36,6 @@ function makeblog(blogdata) {
 
             let authorname = document.createElement("p")
                 authorname.className = "authorname"
-                console.log(blogdata.author.color)
                 authorname.style.color = blogdata.author.color
                 authorname.innerText = blogdata.author.displayname
 
