@@ -13,6 +13,6 @@ let bottomcolor = document.createElement("div")
 
 document.body.append(topcolor, bottomcolor)
 
-document.body.style.backgroundColor = "#ffae6b"
+document.body.style.backgroundColor = "black" //"#ffae6b"
 
 console.log("colored!")
