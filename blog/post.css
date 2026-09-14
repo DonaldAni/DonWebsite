@@ -15,6 +15,15 @@
         flex-direction: column;
 }
 
+#authoricon {
+    position: absolute;
+    right: .5rem;
+    top: .5rem;
+
+    image-rendering: pixelated;
+    width: 100px;
+}
+
 .topdata {
     width: 100%;
     min-height: 6rem;
@@ -62,6 +71,8 @@
     text-indent: 4rem;
 
     box-sizing: border-box;
+
+    position: relative;
 }
 .container > * {
     -webkit-text-stroke: 0px transparent;
