@@ -1,0 +1,14 @@
+.eximage {
+    width: 50%;
+
+    display: block;
+    margin: auto;
+
+    border: 2px solid black;
+}
+.exdesc {
+    opacity: 50%;
+    font-style: italic;
+    text-align: center;
+    font-size: 70%;
+}

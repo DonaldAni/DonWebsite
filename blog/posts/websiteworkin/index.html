@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <link rel="stylesheet" href="/shared/css/style.css">
+        <link rel="icon" type="image/png" href="/shared/img/DarcyIcon.png">
+    
+        <link rel="stylesheet" href="../../post.css">
+        <link rel="stylesheet" href="websiteworkin.css">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="die">
+            <div id="postcontainer">
+                <div class="topdata">
+                    <img src="../../img/icons/1.png">
+                    <h1 class="title">What's it like to work on DONALDANI.org?</h1>
+                    <div class="date">
+                        <p>whenever</p>
+                        <p>Kayla</p>
+                    </div>
+                </div>
+                <div class="container">
+                    <img src="../../img/authors/kayla.png" id="authoricon">
+                    <p>
+                        Every feature on DONALDANI.org starts with an idea.
+                    </p>
+                    <br>
+                    <p>
+                        Typically, those ideas come from Donald. It is his site after all! And typically, a lot of the ideas tend to be quite complicated. 
+                        Fortunately, I'm not one to shy away from a challenge. One such complicated idea was the <a href="/chatroom">chatroom</a>.
+                        So, in this post, I'll walk you through the process of idea to shippable feature.
+                    </p>
+                    <p>
+                        A lot of development details end up lost to time due to the rapid prototyping and turnaround periods that most features on DONALDANI.org
+                        experience. Many of the features of this site, including the blogs, are finished in a day, if not less. This blog post is not a historical
+                        record, just my own personal recollection of how it all happened.
+                    </p>
+                    <p>
+                        I believe that the chatroom originally started as me bouncing the idea of a forum off of Donald. He, rightfully, said that it would be too much
+                        effort, so we scaled the idea back until it became the chatroom of today. The first step of turning an idea into a user-ready feature is usually
+                        a drawn concept for the frontend. While the original concept for the chatroom is lost, below is an example of the type of concepts that Donald usually gives me.
+                    </p>
+
+                    <img src="concept.png" class="eximage">
+                    <p class="exdesc">The original concept for 'Clip of the week'</p>
+                    
+                    <p>
+                        Concepts tend to be quite simple, leaving filling the details up to me as I build the page.
+                    </p>
+
+                    <img src="firstdraft.png" class="eximage">
+                    <p class="exdesc">The first pushed iteration of the chatroom</p>
+
+                    <p>
+                        The chatroom exists! Or, at least, a very bare-bones version of it does. Working on one thing and one thing only gets boring for me fast, so once I got to this
+                        point I turned my attention to the backend. At this point in the life cycle of DONALDANI.org, it didn't have its dedicated API backend yet, so what was left to
+                        use? Well, my Discord bot Party Phil has a webserver! So, for the first several months of existence, this website's backend was hosted on a Discord bot.
+                    </p>
+                    <p>
+                        There's lots to consider when making a feature as open-ended as this. Unfortunately, I am diagnosed with ADHD. Whoops! As a result, the backend is so messy that it
+                        never properly left the Party Phil ecosystem. To this day, the chatroom is still running off of my Discord bot. But that's besides the point. The first iteration of
+                        the chatroom had all of three features:
+                    </p>
+                    <ol>
+                        <li>Sending messages</li>
+                        <li>Hammering an endpoint to check if any new messages exist</li>
+                        <li>Updating your name (and icon)</li>
+                    </ol>
+                    <br>
+                    <p>
+                        Pretty solid start, huh? Seems like it's nearing completion! But no, because Donald has a new idea:
+                    </p>
+                    <p style="color: #0000ff">
+                        "What if we had special icons and notification sounds and chat colors?"
+                    </p>
+                    <br>
+                    <p>
+                        This is, perhaps, the last thing I wanted to hear. So you know what that means! Time to recode the
+                        entire frontend to be about 10x worse to navigate but theoretically a bit more clean! You know, the
+                        next logical step. So, that spends about 3 hours in the oven. Now's a good time to say that through
+                        the entire process of building the chatroom, we were in a call. It had been going on for about 8 hours now.
+                        But once that's all over, I can finally sit back and relax, knowing the chatroom is finished...
+                    </p>
+                    <p>
+                        ...for about 10 minutes, before <b>I</b> have an idea:
+                    </p>
+                    <p style="color: #ff71a0">
+                        "What if, instead of hammering the endpoint, it connected with a websocket!"
+                    </p>
+                    <p>
+                        You know what that means! Time to recode the entire frontend <i>again</i>, this time structuring it in such
+                        a way that it's no longer tethered to an infinite 5-second loop. I didn't know how websockets worked at this
+                        point. Whoops! Time to learn how those work both in JavaScript AND Python + FastAPI.
+                    </p>
+                    <p>
+                        The call's been going on for about 10 hours now. The chatroom's up, it's working, everything's going swell.
+                        Then <a href="https://hexose.cc">Hexose</a> has an idea:
+                    </p>
+                    <p style="color: #dc4eff">
+                        "What if you could reply to messages?"
+                    </p>
+
+                    <p>
+                        THANKFULLY, this was a feature that I didn't need to make myself. Hexose is a damn good programmer and was
+                        able to add that in himself, which is the only piece of outside code in the entirety of DONALDANI.org. And
+                        finally, with all of that added, the chatroom was finished and is in the state that it is today. 
+                    </p>
+                    <!-- <br> -->
+                    <p style="text-align: center;">---</p>
+                    <!-- <br> -->
+                    <p>
+                        Crazy how much effort went into this one feature, huh? Thankfully, almost no single other features of
+                        DONALDANI.org took nearly this much work to make. The majority of them, like I said, only take about a day
+                        to implement. There's really no moral of this story, I just thought the process of making the chatroom was
+                        really funny. Thanks for reading!
+                    </p>
+                    
+                    <p class="back">
+                        <a href="/blog">Return <<</a>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script src="/shared/js/topbar.js"></script>
+<script src="music.js"></script>
