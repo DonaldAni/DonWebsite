@@ -16,7 +16,8 @@ let toadd = [
     new TopbarEntry("games", "/games/runner"),
     new TopbarEntry("ask", "/questions"),
     new TopbarEntry("chat", "/chatroom"),
-    new TopbarEntry("blog", "/blog")
+    new TopbarEntry("blog", "/blog"),
+    new TopbarEntry("ads", "https://donaldapi.kayladotcom.org/philads/submit.html"),
 ]
 
 // marquee texts
