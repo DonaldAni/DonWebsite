@@ -15,9 +15,10 @@ hr {
 
     border: 2px solid white;
 }
-@media(max-width: 654px) {
+@media(max-width: 1000px) {
     #clip {
-        width: 80%;
+        width: 90%;
+        height: auto;
     }
 }
 
