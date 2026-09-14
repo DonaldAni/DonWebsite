@@ -14,7 +14,7 @@
     row-gap: 15px;
     column-gap: 5px;
 }
-@media (max-width: 654px) {
+@media (max-width: 1000px) {
     #cardcontainer {
         grid-template-columns: repeat(auto-fit, 100%);
 

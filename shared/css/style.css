@@ -28,6 +28,7 @@ html::before {
 
 body {
     /* background: linear-gradient(to bottom,  rgba(255,174,107,1) 0%,rgba(255,174,107,1) 49%,rgba(255,174,107,1) 51%,rgba(0,0,0,1) 51%,rgba(0,0,0,1) 100%); */
+    background-color: #ffae6b;
 
     margin: 0;
     padding: 0;

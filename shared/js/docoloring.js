@@ -1,18 +1,26 @@
-let coloring = document.createElement("link")
+function applycoloring() {
+    let coloring = document.createElement("link")
     coloring.href = "/shared/css/coloring.css"
     coloring.rel = "stylesheet"
 
-document.head.append(coloring)
+    document.head.append(coloring)
 
-let topcolor = document.createElement("div")
-    topcolor.className = "topcolor"
-    topcolor.ariaHidden = "true"
-let bottomcolor = document.createElement("div")
-    bottomcolor.className = "bottomcolor"
-    bottomcolor.ariaHidden = "true"
+    let topcolor = document.createElement("div")
+        topcolor.className = "topcolor"
+        topcolor.ariaHidden = "true"
+    let bottomcolor = document.createElement("div")
+        bottomcolor.className = "bottomcolor"
+        bottomcolor.ariaHidden = "true"
 
-document.body.append(topcolor, bottomcolor)
+    let bgcolor = window.getComputedStyle(document.body).backgroundColor
+        bottomcolor.style.background = bgcolor
+    console.log(bgcolor)
 
-document.body.style.backgroundColor = "black" //"#ffae6b"
+    document.body.append(topcolor, bottomcolor)
 
-console.log("colored!")
+    document.body.style.backgroundColor = "black" //"#ffae6b"
+
+    console.log("colored!")
+}
+
+applycoloring()
