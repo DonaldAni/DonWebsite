@@ -70,6 +70,9 @@ img.kaylabutton {
     border-right: 6px solid black;
     box-sizing: border-box;
 }
+.secretpanel a {
+    color: orange;
+}
 .secretinput {
     width: 70%;
 }

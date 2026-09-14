@@ -96,8 +96,8 @@ async function loadposts() {
     const postdata = await postres.json()
 
     for(const post of postdata) {
-        console.log(post)
         let blogpost = new BlogData(post.title, post.date, post.icon, AUTHOR_DATA[post.author], post.previewtext, post.path)
+
         let blogpreview = makeblog(blogpost)
         BLOGS.append(blogpreview)
     }
