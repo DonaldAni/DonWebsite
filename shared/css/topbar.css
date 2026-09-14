@@ -45,7 +45,7 @@
     height: 5vh;
     transition: transform 0.25s ease, filter 0.25s ease;
 }
-.topbaricon:hover {
+topbar-item > a:hover > img {
     /* make it bigger when its hovered */
     transform: scale(1.15);
     /* make it brighter when hovered */
