@@ -61,7 +61,6 @@ function populatesonglist() {
 
     let i = 0
     for(const songname of songnames) {
-        console.log(songname)
         /*
         <div class="songentry">
             <div class="playcontainer">
@@ -86,7 +85,6 @@ function populatesonglist() {
 
                     const ii = i
                     playbutton.addEventListener("click", function() {
-                        console.log(ii)
                         play(ii)
                     })
                 playcontainer.append(playbutton)
