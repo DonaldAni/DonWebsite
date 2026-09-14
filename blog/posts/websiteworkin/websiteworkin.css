@@ -12,3 +12,7 @@
     text-align: center;
     font-size: 70%;
 }
+
+ol {
+    list-style-position: inside;
+}
