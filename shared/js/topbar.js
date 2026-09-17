@@ -53,7 +53,7 @@ let canpick = [
     // '<span style="color: rgb(219, 21, 21)">cass</span> ill kill you, you you YOU.',
     // '<span style="color: rgb(219, 21, 21)">dont put alyanna in the secrets tab.</span>',
     // 'happy new year <span style="color: rgb(255, 227, 190)">2002!</span>',
-    '<audio controls> <source src="/shared/img/topbar/sound/pollyanna.wav" type="audio/wav"></audio>'
+    '<audio controls> <source src="/shared/img/topbar/sound/pollyanna.ogg" type="audio/ogg"></audio>',
 
     // // ones i added
     // "fart mode: TRUE",
