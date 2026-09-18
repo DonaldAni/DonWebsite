@@ -1,8 +1,0 @@
-{
-    "title": "What's it like to work on DONALDANI.org?",
-    "date": "9/18/26",
-    "icon": "2.png",
-    "author": "kayla",
-    "previewtext": "I explain what it takes to add a feature like the chatroom to DONALDANI.org, from backend work to Donald's drawn concepts, everything gets explained!",
-    "path": "websiteworkin"
-},
