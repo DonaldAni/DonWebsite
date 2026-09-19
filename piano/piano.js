@@ -19,7 +19,8 @@ const canplay = [
     "sound/piano11.mp3",
     "sound/piano12.mp3",
     "sound/piano13.mp3",
-    "sound/piano14.mp3"
+    "sound/piano14.mp3",
+    "sound/piano15.mp3"
 ]
 
 const songnames = [
@@ -36,6 +37,7 @@ const songnames = [
     "Enjoy Your Stay",
     "Eight Melodies (Mother 1)",
     "Eight Melodies (Mother 2/Earthbound)",
+    "Love Theme (Mother 3)",
     "A WAY OUT"
 ]
 
@@ -50,6 +52,7 @@ const serieses = [
     "misc",
     "misc",
     "r64",
+    "mother",
     "mother",
     "mother",
     "mother",
