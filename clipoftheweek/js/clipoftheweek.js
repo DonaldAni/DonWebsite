@@ -11,13 +11,13 @@ function getdurationofvideo(filename) {
         let video = document.createElement("video")
         video.src = `videos/${filename}`
 
-        video.addEventListener("loadedmetadata", () => {
+        video.addEventListener("durationchange", () => {
             resolve(video.duration)
-        })
+        }, { once: true })
 
         video.addEventListener("error", () => {
             reject(new Error("Failed to load video metadata"))
-        })
+        }, { once: true })
     })
 }
 function formatvideoduration(duration) {
