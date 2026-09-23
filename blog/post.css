@@ -41,6 +41,17 @@ body {
     width: 100px;
 }
 
+@media (max-width: 1000px) {
+    #authoricons {
+        display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+
+        width: 100%;
+    }
+}
+
 .topdata {
     width: 100%;
     min-height: 6rem;
