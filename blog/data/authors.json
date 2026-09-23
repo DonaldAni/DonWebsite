@@ -14,5 +14,10 @@
         "icon": "kayla.png",
         "displayname": "Kayla",
         "color": "#ff71a0"
+    },
+    "lalala": {
+        "icon": "hexose.png",
+        "displayname": "Team\nLa La La",
+        "color": "#dc4eff"
     }
 }

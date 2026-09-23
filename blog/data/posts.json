@@ -1,5 +1,13 @@
 [
     {
+        "title": "GM FORTY EIGHT",
+        "date": "9/23/26",
+        "icon": "3.png",
+        "author": "lalala",
+        "previewtext": "The 48-hour story of John Miner, condensed into a single blog post for your viewing pleasure.",
+        "path": "gm48"
+    },
+    {
         "title": "What's it like to work on DONALDANI.org?",
         "date": "9/18/26",
         "icon": "2.png",

@@ -25,10 +25,18 @@ body {
 }
 
 #authoricon {
-    position: absolute;
+    /* position: absolute;
     right: .5rem;
-    top: .5rem;
+    top: .5rem; */
 
+    float: right;
+    image-rendering: pixelated;
+    width: 100px;
+}
+#authoricons {
+    float: right;
+}
+#authoricons > img {
     image-rendering: pixelated;
     width: 100px;
 }
@@ -100,4 +108,23 @@ body {
         box-sizing: border-box;
         height: max-content;
     }
+}
+
+.eximage {
+    width: 50%;
+
+    display: block;
+    margin: auto;
+
+    border: 2px solid black;
+}
+.exdesc {
+    opacity: 50%;
+    font-style: italic;
+    text-align: center;
+    font-size: 70%;
+}
+
+h3 {
+    text-align: center;
 }

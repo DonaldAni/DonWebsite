@@ -1,0 +1,68 @@
+.donaldtext {
+    color: #0000ff;
+}
+.kaylatext {
+    color: #ff71a0;
+}
+.hexosetext {
+    color: #dc4eff;
+}
+
+.gmlfunc {
+    color: #FFB871;
+}
+
+
+p.hi {
+    text-align: center;
+    text-indent: 0;
+}
+
+.audiostuff {
+    width: 80%;
+
+    margin-right: 10%;
+    margin-left: 10%;
+
+    display: flex;
+        justify-content: space-between;
+}
+.audiostuff audio {
+    font-size: 100%;
+    height: 40px;
+    margin: 0;
+    padding: 0;
+}
+.audiostuff * {
+    text-indent: 0;
+}
+.audiostuff > div {
+    display: flex;
+        flex-direction: column;
+        align-items: center;
+
+    width: 50%;
+}
+.audiostuff > div > i {
+    text-align: center;
+}
+
+.audiostuff:has(> :only-child) {
+    justify-content: center;
+}
+
+.heresthecenterer {
+    width: 100%;
+
+    display: flex;
+        align-items: center;
+        justify-content: center;
+    
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 1000px) {
+    .audiostuff {
+        flex-direction: column;
+    }
+}
