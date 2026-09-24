@@ -97,7 +97,6 @@ body {
 
     font-size: 120%;
     text-align: left;
-    text-indent: 4rem;
 
     box-sizing: border-box;
 
@@ -105,6 +104,9 @@ body {
 }
 .container > * {
     -webkit-text-stroke: 0px transparent;
+}
+.container > p:not(.exdesc) {
+    text-indent: 4rem;
 }
 
 .back {
