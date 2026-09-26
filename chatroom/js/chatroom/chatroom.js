@@ -230,7 +230,7 @@ async function pingserver() {
     } catch(e) {
         console.error(e)
         console.log("failed to pign server " + ChatState.lastsuccessfulping)
-        if(Date.now() - ChatState.lastsuccessfulping > PING_INTERVAL * 5) {
+        if(Date.now() - ChatState.lastsuccessfulping > PING_INTERVAL * 50) {
             console.log("disconnecting because of failed ping")
             alert("Lost connection to chatroom server, refresh the tab?")
 
