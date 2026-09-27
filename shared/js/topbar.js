@@ -10,7 +10,7 @@ class TopbarEntry {
 let toadd = [
     new TopbarEntry("home", "/home"),
     new TopbarEntry("twitter", "https://x.com/DonaldAni1010", true),
-    new TopbarEntry("youtube", "https://www.youtube.com/@donaldani10/videos", true),
+    new TopbarEntry("youtube", "https://www.youtube.com/@donaldani0/videos", true),
     new TopbarEntry("roblox", "https://www.roblox.com/users/349593445/profile", true),
     new TopbarEntry("comms", "https://donaldani.com"),
     new TopbarEntry("games", "/games/runner"),
