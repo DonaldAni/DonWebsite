@@ -142,10 +142,7 @@ class TopBar extends HTMLElement {
             <div class="topbaricons" id="topbaricons">
                 <input type="checkbox" id="hamburgerbutton">
                 <label id="hamburgerlabel" for="hamburgerbutton"><img src="/shared/img/socials/hamburger.gif"></label>
-                <div id="realicons">
-                    <div id="sitelinks"></div>
-                    <div id="sociallinks"></div>
-                </div>
+                <div id="realicons"></div>
             </div>
 
             <div class="scrollingcontainer">
@@ -173,19 +170,14 @@ document.head.appendChild(style)
 let topbar = document.createElement("top-bar")
 document.body.prepend(topbar)
 
-let sitelinks = document.getElementById("sitelinks")
-let sociallinks = document.getElementById("sociallinks")
+let topbaricons = document.getElementById("realicons")
 
-for(entry of toadd) {
+for(social of toadd) {
     let item = document.createElement("topbar-item")
-    item.setAttribute("img", entry.img)
-    item.setAttribute("link", entry.link)
+    item.setAttribute("img", social.img)
+    item.setAttribute("link", social.link)
 
-    if(!entry.social) {
-        sitelinks.append(item)
-    } else {
-        sociallinks.append(item)
-    }
+    topbaricons.appendChild(item)
 }
 
 document.documentElement.lang = "en" // zalgo text makes it think its vietnamese
