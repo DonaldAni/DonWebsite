@@ -18,6 +18,7 @@ let toadd = [
     new TopbarEntry("chat", "/chatroom"),
     new TopbarEntry("blog", "/blog"),
     new TopbarEntry("ads", "https://donaldapi.kayladotcom.org/philads/submit.html"),
+    new TopbarEntry("VC", "/voicechat"),
 ]
 
 // marquee texts
@@ -192,5 +193,4 @@ document.documentElement.lang = "en" // zalgo text makes it think its vietnamese
 
 // this is already in every page so might as well just hitch onto that
 let scr = document.createElement("script")
-    scr.src = "/shared/js/docoloring.js"
 document.body.appendChild(scr)
