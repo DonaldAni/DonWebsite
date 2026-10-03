@@ -9,8 +9,11 @@ body {
     background-attachment: fixed;
 }
 #container {
-    width: 100%;
-    height: 94vh;
+    position: absolute;
+        left: 0;
+        right: 0;
+        top: 8vh;
+        bottom: 0;
 
     display: flex;
         flex-direction: column;
