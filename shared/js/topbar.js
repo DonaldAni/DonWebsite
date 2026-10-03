@@ -184,5 +184,4 @@ document.documentElement.lang = "en" // zalgo text makes it think its vietnamese
 
 // this is already in every page so might as well just hitch onto that
 let scr = document.createElement("script")
-    scr.src = "/shared/js/docoloring.js"
 document.body.appendChild(scr)
