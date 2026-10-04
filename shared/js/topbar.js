@@ -33,7 +33,6 @@ let canpick = [
     "shoutout the sunglasses team",
     "shoutout the <a href=\"/home\">artist</a> of this website",
     "i hope i remember to pay for this site",
-    "i also own donaldani.com, i just cant use it",
     "im 0-22 in wrestling, JV warrior???",
     "sniper is the worst class, you should die if you main him #truthnuke",
     "is 3'2'' 400lbs good? im trying to cut down to 6'9'' 125 lbs.",
