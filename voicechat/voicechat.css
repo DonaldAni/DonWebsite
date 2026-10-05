@@ -273,6 +273,7 @@ input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb
     background-image: url("img/slidergrip.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    image-rendering: pixelated;
     
     border-radius: 2px;
     /* margin-top: -5px; */
