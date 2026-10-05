@@ -9,10 +9,17 @@ function saveseen(newdata) {
 function getdurationofvideo(filename) {
     return new Promise((resolve, reject) => {
         let video = document.createElement("video")
+        video.preload = "metadata"
         video.src = `videos/${filename}`
 
-        video.addEventListener("durationchange", () => {
-            resolve(video.duration)
+        video.addEventListener("loadedmetadata", () => {
+            let dur = video.duration
+
+            if(Number.isFinite(dur) && dur > 0) {
+                resolve(dur)
+            } else {
+                reject(new Error("Invalid video duration"))
+            }
         }, { once: true })
 
         video.addEventListener("error", () => {
