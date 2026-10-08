@@ -20,7 +20,8 @@ const canplay = [
     "sound/piano12.mp3",
     "sound/piano13.mp3",
     "sound/piano14.mp3",
-    "sound/piano15.mp3"
+    "sound/piano15.mp3",
+    "sound/piano16.mp3"
 ]
 
 const songnames = [
@@ -38,7 +39,8 @@ const songnames = [
     "Eight Melodies (Mother 1)",
     "Eight Melodies (Mother 2/Earthbound)",
     "Love Theme (Mother 3)",
-    "A WAY OUT"
+    "A WAY OUT",
+    "Return of The Mack"
 ]
 
 const serieses = [
@@ -56,7 +58,8 @@ const serieses = [
     "mother",
     "mother",
     "mother",
-    "awayout"
+    "awayout",
+    "misc"
 ]
 
 function populatesonglist() {
