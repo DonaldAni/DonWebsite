@@ -21,10 +21,6 @@ body {
         justify-content: center;
 }
 
-#container * {
-    /* border: 1px solid red; */
-}
-
 #vc-frame {
     height: 95%;
     aspect-ratio: 4/3;
