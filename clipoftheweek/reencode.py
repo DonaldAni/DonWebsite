@@ -20,7 +20,7 @@ def reencode(src, output):
     )
 
     # we don't actually care that much about keeping the original. move to overwrite
-    os.replace(output, input)
+    os.replace(output, src)
 
 if not os.path.exists("./videos/encoded"):
     os.mkdir("./videos/encoded")
