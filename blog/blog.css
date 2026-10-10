@@ -33,8 +33,7 @@
 }
 .authoricon {
     display: block;
-    height: 45%;
-    width: auto;
+    width: 100%;
     image-rendering: pixelated;
 }
 .authorname {
@@ -45,6 +44,7 @@
 .blogpreviewbody {
     background-color: white;
     flex-grow: 1;
+    max-width: 100%;
 
     box-sizing: border-box;
     border: 2px solid black;
