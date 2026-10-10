@@ -10,7 +10,7 @@ html, body {
 }
 
 html {
-    /* filter: hue-rotate(-20deg); */ /* its not spring anymore. */
+    filter: hue-rotate(-30deg); /* its not spring anymore. */
     margin: 0;
     padding: 0;
 }
@@ -22,7 +22,7 @@ html::before {
     top: 0;
     width: 100%;
     height: 100lvh;
-    background-image: linear-gradient(rgb(255, 255, 255), rgb(255, 174, 107));
+    background-image: linear-gradient(rgb(173, 84, 154), rgb(189, 77, 12));
     z-index: -1;
 }
 
