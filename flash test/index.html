@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Play Flash with Ruffle</title>
+</head>
+<body>
+    <div id="flash-container" style="width: 800px; height: 600px;"></div>
+
+    <script>
+        window.RufflePlayer = window.RufflePlayer || {};
+        
+        window.addEventListener("DOMContentLoaded", () => {
+            const ruffle = window.RufflePlayer.newest();
+            const player = ruffle.createPlayer();
+            
+            const container = document.getElementById("flash-container");
+            container.appendChild(player);
+            
+            player.load({
+                url: "incrediblebox.swf"
+            });
+        });
+    </script>
+    <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+</body>
+</html>
