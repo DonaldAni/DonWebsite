@@ -15,8 +15,7 @@ let queue = {
     "dont.come.back": "dont come back.ogg",
     "a way out": "gm48 title.ogg",
     "morning jog": "morning jog.ogg",
-    "gasters groove": "gaster.mp3",
-    "check the blog": "darcy.ogg"
+    "gasters groove": "gaster.mp3"
 }
 
 let audiolength = NaN
