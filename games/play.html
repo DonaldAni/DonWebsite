@@ -27,7 +27,7 @@
 
         <style>
             #ffwarning {
-                display: flex;
+                display: none;
                 flex-direction: column;
                 align-items: center;
             }
@@ -39,43 +39,44 @@
             }
 
             body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                flex-direction: column;
+                min-height: 100vh;
+            }
+
+            #container {
+                /* display: flex; */
+                    /* flex-direction: column; */
+                    /* justify-content: center; */
+                    /* align-items: center; */
+            }
+
+            iframe * {
+                
             }
         </style>
     </head>
     <body>
-        <h1>KAYLA TAKES A REALLY REALLY BAD TURN</h1>
-        <iframe src="source/index.html" style="height: 600px; aspect-ratio: 4/3; max-width: 100%;"allow="autoplay; fullscreen; keyboard" 
-        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
-        <h3>Made by The Sunglasses Team!</h3>
+        <div id="container">
+            <h1 id="title">KAYLA TAKES A REALLY REALLY BAD TURN</h1>
+            <iframe id="game" src="" style="height: 600px; aspect-ratio: 4/3; max-width: 100%;"allow="autoplay; fullscreen; keyboard" 
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups" scrolling="no"></iframe>
+            <h3>Made by The Sunglasses Team!</h3>
 
-        <div id="ffwarning">
-            <span style="color: red;"><h3>FIREFOX USERS:</h3></span>
-            <p>The game probably won't run on firefox. This is okay and expected. What you need to do is:</p>
-            <ul style="text-align: left; width: 55%;">
-                <li>go to about:config</li>
-                <li>turn the following settings to true:
-                    <ul>
-                        <li>webgl.force-enabled</li>
-                        <li>layers.acceleration.force-enabled</li>
-                    </ul>
-                </li>
-                <li>restart your web browser</li>
-            </ul>
+            <div id="ffwarning">
+                <span style="color: red;"><h3>FIREFOX USERS:</h3></span>
+                <p>The game probably won't run on firefox. This is okay and expected. What you need to do is:</p>
+                <ul style="text-align: left; width: 55%;">
+                    <li>go to about:config</li>
+                    <li>turn the following settings to true:
+                        <ul>
+                            <li>webgl.force-enabled</li>
+                            <li>layers.acceleration.force-enabled</li>
+                        </ul>
+                    </li>
+                    <li>restart your web browser</li>
+                </ul>
+            </div>
         </div>
     </body>
 </html>
 <script src="/shared/js/topbar.js"></script>
-<script>
-    const FF_WARNING = document.getElementById("ffwarning")
-
-    if(navigator.userAgent.includes("Firefox")) {
-        FF_WARNING.style.display = "flex"
-    } else {
-        FF_WARNING.style.display = "none"
-    }
-</script>
+<script src="play.js"></script>
