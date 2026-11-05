@@ -13,7 +13,7 @@ let toadd = [
     new TopbarEntry("youtube", "https://www.youtube.com/@donaldani0/videos", true),
     new TopbarEntry("roblox", "https://www.roblox.com/users/349593445/profile", true),
     new TopbarEntry("comms", "https://donaldani.com"),
-    new TopbarEntry("games", "/games/runner"),
+    new TopbarEntry("games", "/games"),
     new TopbarEntry("ask", "/questions"),
     new TopbarEntry("chat", "/chatroom"),
     new TopbarEntry("blog", "/blog"),
