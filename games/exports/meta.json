@@ -1,0 +1,26 @@
+{
+    "order": [
+        "runner",
+        "lovesme"
+    ],
+    "data": {
+        "runner": {
+            "type": "wasm",
+            "title": "Kayla Takes a Really Really Bad Turn",
+
+            "style": {
+                "aspect-ratio": "4/3",
+                "height": "600px"
+            }
+        },
+        "lovesme": {
+            "type": "html",
+            "title": "Loves Me, Loves Me Not",
+
+            "style": {
+                "aspect-ratio": "1",
+                "height": "800px"
+            }
+        }
+    }
+}
