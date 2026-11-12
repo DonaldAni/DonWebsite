@@ -1,3 +1,12 @@
+const PIANO_DATA_KEY = "pianodata"
+const PIANO_DATA = JSON.parse(window.localStorage.getItem(PIANO_DATA_KEY) ?? JSON.stringify({
+    "autoplay": false,
+    "looponce": false,
+
+    "shuffle": false,
+    "loop": false
+}))
+
 var piano = document.getElementById("piano")
 var songname = document.getElementById("songname")
 
@@ -118,26 +127,30 @@ function populatesonglist() {
 }
 populatesonglist()
 
-function play(idx) {
+var songidx = 0
+function play(idx, forced=false) {
     let songentry = document.getElementById(idx.toString())
     let playbutton = songentry.getElementsByTagName("img")[0]
 
-    if(playbutton != curplaybutton && curplaybutton) {
+    if(!forced && playbutton != curplaybutton && curplaybutton) {
         playing = false
         curplaybutton.src = "img/play.png"
     }
     curplaybutton = playbutton
     
-    var songidx = idx
+    songidx = idx
 
     audio.src = canplay[songidx]
 
     songname.style.color = "white"
     songname.innerHTML = `<i>"${songnames[songidx]}"</i>`
 
+    if(forced) {
+        playing = false
+    }
     toggleplay()
 }
-function toggleplay() {
+function toggleplay(forced=false) {
     playing = !playing
 
     if(playing) {
@@ -156,4 +169,74 @@ function toggleplay() {
     }
 }
 
-audio.addEventListener('ended', toggleplay)
+audio.addEventListener('ended', function() {
+    if(!PIANO_DATA.autoplay && !PIANO_DATA.looponce) {
+        console.log("condition 1")
+        toggleplay(true)
+    } else if(PIANO_DATA.autoplay) {
+        console.log("condition 2")
+
+        let newidx
+        if(!PIANO_DATA.shuffle) {
+            console.log("condition 2.1")
+
+            newidx = songidx+1
+            if(newidx > canplay.length-1) {
+                console.log("condition 2.1.1")
+
+                if(!PIANO_DATA.loop) {
+                    console.log("condition 2.1.1.1")
+
+                    toggleplay(true)
+                    return
+                } else {
+                    console.log("condition 2.1.1.2")
+
+                    newidx = 0
+                }
+            }
+        } else {
+            console.log("condition 2.2")
+
+            newidx = Math.floor(Math.random() * canplay.length)
+        }
+        play(newidx)
+    } else if(PIANO_DATA.looponce) {
+        console.log("condition 3")
+        play(songidx, true)
+    }
+})
+
+// datastuff
+function save() {
+    window.localStorage.setItem(PIANO_DATA_KEY, JSON.stringify(PIANO_DATA))
+}
+function toggle(what) {
+    PIANO_DATA[what] = !PIANO_DATA[what]
+    save()
+}
+
+// populate
+let autoplaycheck = document.getElementById("autoplay")
+let looponcecheck = document.getElementById("looponce")
+let shufflecheck  = document.getElementById("shuffle")
+let loopcheck     = document.getElementById("loop")
+
+autoplaycheck.checked = PIANO_DATA.autoplay
+looponcecheck.checked = PIANO_DATA.looponce
+shufflecheck.checked  = PIANO_DATA.shuffle
+loopcheck.checked     = PIANO_DATA.loop
+
+// set up toggling
+autoplaycheck.addEventListener("click", () => {
+    toggle("autoplay")
+})
+looponcecheck.addEventListener("click", () => {
+    toggle("looponce")
+})
+shufflecheck.addEventListener("click", () => {
+    toggle("shuffle")
+})
+loopcheck.addEventListener("click", () => {
+    toggle("loop")
+})
