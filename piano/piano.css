@@ -137,7 +137,7 @@ body {
     }
 }
 
-label {
+#pianocontainer label {
     font-size: 90%;
     font-style: italic;
     opacity: 50%;
