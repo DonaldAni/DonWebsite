@@ -1,3 +1,10 @@
+// this is already in every page so might as well just hitch onto that
+//let scr = document.createElement("script")
+//document.body.appendChild(scr)
+let mp = document.createElement("script")
+    mp.src = "/shared/js/musicplayer.js"
+    document.body.append(mp)
+
 class TopbarEntry {
     constructor(img, link, social=false) {
         this.img = img
@@ -189,7 +196,3 @@ for(entry of toadd) {
 }
 
 document.documentElement.lang = "en" // zalgo text makes it think its vietnamese
-
-// this is already in every page so might as well just hitch onto that
-let scr = document.createElement("script")
-document.body.appendChild(scr)
