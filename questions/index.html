@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 <html>
     <head>
         <link rel="stylesheet" href="/shared/css/style.css">
@@ -96,6 +98,7 @@
 
     async function getquestions() {
         await fetch(TOGET).then((data) => data.json()).then((data) => {
+            console.log(data)
             if(data.length == 0) {
                 ANSWERED.innerHTML = "no questions yet! you could be the first!"
                 return
