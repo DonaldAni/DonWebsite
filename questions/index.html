@@ -127,6 +127,9 @@
                 }).replace(", ", " @ ")
 
                 console.log(formatted)
+                if(answered.wii) {
+                    formatted += " - asked on Wii!"
+                }
 
                 qdiv.innerHTML = `
                     <span class="date">
