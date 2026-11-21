@@ -19,5 +19,10 @@
         "icon": "hexose.png",
         "displayname": "Team\nLa La La",
         "color": "#dc4eff"
+    },
+    "paint": {
+        "icon": "paint.png",
+        "displayname": "Paint",
+        "color": "#3367d6"
     }
 }
