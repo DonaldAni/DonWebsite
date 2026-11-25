@@ -110,6 +110,11 @@ video-card:active {
     margin: 0;
     transition: background-color .065s linear;
 }
+@media (max-width: 1000px) {
+    #cotycontainer:not(:empty) {
+        grid-column: span 1;
+    }
+}
 #cotycontainer:hover {
     background-color: rgb(65, 65, 65);
     cursor: pointer;
