@@ -62,14 +62,14 @@ function lookforclipdata(data) {
     if(gottenclip.tags) {
         processtags(gottenclip.tags)
     }
-    if(gottenclip.featuring) {
-        for(const person of gottenclip.featuring) {
-            let pfp = document.createElement("img")
-                pfp.src = `pfps/${person}.png`
+    // if(gottenclip.featuring) {
+    //     for(const person of gottenclip.featuring) {
+    //         let pfp = document.createElement("img")
+    //             pfp.src = `pfps/${person}.png`
 
-            FEATURING.append(pfp)
-        }
-    }
+    //         FEATURING.append(pfp)
+    //     }
+    // }
 
     LOADING.remove()
     document.getElementById("waitforload").id = ""
