@@ -15,19 +15,37 @@
         "thumbnail": "week12.png",
         "week": "9/27/26",
         "title": "I AM THE KING.",
-        "description": "Im sure one dude was a black king, i mean Obama was a cool guy."
+        "description": "Im sure one dude was a black king, i mean Obama was a cool guy.",
+    
+        "featuring": [
+            "donald",
+            "myke",
+            "kayla",
+            "paint"
+        ]
     },
     "sniper.mp4": {
         "thumbnail": "week11.png",
         "week": "9/20/26",
         "title": "THE SAW",
-        "description": "This is why you stay to the left, eye protection and tie your hair back"
+        "description": "This is why you stay to the left, eye protection and tie your hair back",
+    
+        "featuring": [
+            "donald",
+            "kayla"
+        ]
     },
     "explosion.mp4": {
         "thumbnail": "week10.png",
         "week": "9/13/26",
         "title": "If You Laugh You Get Black Flashed",
-        "description": "Safe to say, i laughed"
+        "description": "Safe to say, i laughed",
+
+        "featuring": [
+            "donald",
+            "kayla",
+            "whoever else"
+        ]
     },
     "callaway.mp4": {
         "thumbnail": "week9.png",
@@ -47,6 +65,11 @@
         "title": "brain aneurysm",
         "description": "well, he sure did kill him",
 
+        "featuring": [
+            "kayla",
+            "hexose",
+            "donald"
+        ],
         "tags": [
             "kayla"
         ]
@@ -55,7 +78,13 @@
         "thumbnail": "week6.png",
         "week": "7/19/26",
         "title": "in my defense it was a scary robot",
-        "description": "if YOU were in a cave and heard those noises, wouldnt you wanna turn back?"
+        "description": "if YOU were in a cave and heard those noises, wouldnt you wanna turn back?",
+    
+        "featuring": [
+            "donald",
+            "kayla",
+            "paint"
+        ]
     },
     "surprise.mp4": {
         "thumbnail": "week5.png",
@@ -63,6 +92,12 @@
         "title": "surprise!",
         "description": "sometimes you gotta do what you gotta do. i don't think i had to do that though. sorry paint",
 
+        "featuring": [
+            "kayla",
+            "donald",
+            "paint",
+            "myke"
+        ],
         "tags": [
             "kayla"
         ]
@@ -71,13 +106,22 @@
         "thumbnail": "week4.png",
         "week": "6/29/26",
         "title": "paint wai",
-        "description": "i look away for a second and this guy is already gone"
+        "description": "i look away for a second and this guy is already gone",
+
+        "featuring": [
+            "donald",
+            "paint"
+        ]
     },
     "no excuses.mp4": {
         "thumbnail": "week3.png",
         "week": "6/21/26",
         "title": "I have no excuses",
-        "description": "No really i have no idea how i didnt realize it was a mine, it was red and glowing and everything"
+        "description": "No really i have no idea how i didnt realize it was a mine, it was red and glowing and everything",
+
+        "featuring": [
+            "donald"
+        ]
     },
     "homer.mp4": {
         "thumbnail": "week2.png",
@@ -89,6 +133,11 @@
         "thumbnail": "week1.png",
         "week": "5/24/26",
         "title": "Put Teleporter Here",
-        "description": "kayla, dont ever do this again, i was terrified of not saving 12 seconds of travel."
+        "description": "kayla, dont ever do this again, i was terrified of not saving 12 seconds of travel.",
+
+        "featuring": [
+            "donald",
+            "kayla"
+        ]
     }
 }

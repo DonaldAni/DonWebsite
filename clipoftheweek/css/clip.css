@@ -10,6 +10,7 @@ hr {
 
 /* classes/ids */
 #clip {
+    display: block;
     height: 30rem;
     align-self: center;
 
@@ -24,4 +25,23 @@ hr {
 
 #waitforload {
     display: none;
+}
+
+#clipparent {
+    position: relative;
+    display: inline-block;
+}
+#ft {
+    display: flex;
+        flex-direction: row;
+        gap: 5px;
+    
+    position: relative;
+        top: 100%;
+        left: 0%;
+
+    width: max-content;
+    height: 50px;
+
+    padding-top: 2px;
 }

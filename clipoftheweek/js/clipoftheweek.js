@@ -54,9 +54,19 @@ class VideoCard extends HTMLElement {
     async doit() {
         this.thumbnail = this.getAttribute("thumbnail")
         this.week = this.getAttribute("week")
+        this.year = this.getAttribute("year")
         this.title = this.getAttribute("title")
         this.goesto = this.getAttribute("goesto")
         this.latest = this.getAttribute("latest") === "true"
+
+        let seen = false
+        for(const vid of loadseen()) {
+            if(vid === this.goesto) {
+                seen = true
+                break
+            }
+        }
+        this.latest = !seen
     
         let card = document.createElement("div")
             card.className = "card"
@@ -88,7 +98,14 @@ class VideoCard extends HTMLElement {
                 titlebar.className = "titlebar"
                 
                 let title = document.createElement("h2")
-                    title.textContent = `WEEK OF ${this.week}`
+                    if(!this.getAttribute("year")) {
+                        title.textContent = `WEEK OF ${this.week}`
+                    } else {
+                        title.textContent = `YEAR OF ${this.year}`
+
+                        title.style.fontSize = "300%"
+                        title.style.fontStyle = "italic"
+                    }
                     if(this.latest) {
                         title.style.color = "yellow"
                     }
@@ -170,3 +187,16 @@ fetch("clips.json")
 
         LOADING_TEXT.remove()
     })
+
+let coty = document.getElementById("cotycontainer")
+if(coty) {
+    coty.addEventListener("click", () => {
+        let seen = loadseen()
+        if(!seen.includes(coty.getAttribute("goesto"))) {
+            seen.push(coty.getAttribute("goesto"))
+        }
+        saveseen(seen)
+
+        window.location.href = `clip.html?clip=${coty.getAttribute("goesto")}`
+    })
+}

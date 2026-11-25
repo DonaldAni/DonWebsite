@@ -14,15 +14,18 @@
         <h1 id="loading">LOADING...</h1>
 
         <div id="waitforload">
-            <h1>CLIP OF THE WEEK</h1>
-            <h2>(week of <span id="week">7/12/26</span>)</h2>
+            <h1>CLIP OF THE <span id="title-timeframe">WEEK</span></h1>
+            <h2>(<span id="timeframe">week</span> of <span id="week">7/12/26</span>)</h2>
             
             <hr>
             <div style="height: 15px"></div>
 
-            <video id="clip" controls>
-                <source id="clipsrc" src="videos/clip.mp4" type="video/mp4">
-            </video>
+            <div id="clipparent">
+                <video id="clip" controls>
+                    <source id="clipsrc" src="videos/clip.mp4" type="video/mp4">
+                </video>
+                <div id="ft"></div>
+            </div>
             <h2 id="title">title here</h2>
             <i id="description">description goes here</i>
 
