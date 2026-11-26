@@ -12,6 +12,7 @@
     border: 4px solid black;
 
     transition: transform 0.1s ease;
+    /* transform: translateY(-370px); */
 
     z-index: 9999;
 
@@ -51,7 +52,7 @@
 
 #mpsonglist {
     width: 100%;
-    height: calc(100% - 90px - 15px);
+    height: calc(100% - 90px - 25px);
 
     background-color: rgb(31, 25, 23);
 
@@ -62,7 +63,7 @@
 }
 #mptimecontainer {
     width: 100%;
-    height: 10px;
+    height: 20px;
 
     background-color: rgb(31, 25, 23);
     color: gray;
@@ -82,11 +83,17 @@
 
     background-color: rgb(15, 6, 6);
 }
+#mpplayheadback:hover {
+    cursor: pointer;
+}
+
 #mpplaybar {
     width: 50%;
     height: 5px;
 
     background-color: rgb(255, 168, 86);
+
+    pointer-events: none;
 }
 #mpplayhead {
     width: 10px;
@@ -101,6 +108,8 @@
         bottom: calc(50% + 5px);
 
     border-radius: 100%;
+
+    pointer-events: none;
 }
 
 .mpcurrentlyplaying {

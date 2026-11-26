@@ -108,6 +108,16 @@ let musicplayerroot = document.createElement("div")
     let playheadback = document.createElement("div")
         playheadback.id = "mpplayheadback"
 
+        playheadback.addEventListener("click", (e) => {
+            // skip to clickx/width * 100% of the way through the current song
+            let clickx = e.offsetX
+            let width = playheadback.offsetWidth
+            
+            let percent = clickx / width
+            
+            audio.currentTime = percent * audio.duration
+        })
+
         let playbar = document.createElement("div")
             playbar.id = "mpplaybar"
 
@@ -222,12 +232,16 @@ setsong(toset, false)
 
 // hooks
 skipback.addEventListener('click', function() {
-    let skippingto = playingidx - 1
-    if(skippingto < 0) {
-        skippingto = Object.keys(queue).length - 1
-    }
+    if(audio.currentTime < 1) {
+        let skippingto = playingidx - 1
+        if(skippingto < 0) {
+            skippingto = Object.keys(queue).length - 1
+        }
 
-    setsong(skippingto)
+        setsong(skippingto)
+    } else {
+        audio.currentTime = 0
+    }
 })
 playbutton.addEventListener('click', function() {
     if(thinking) {
