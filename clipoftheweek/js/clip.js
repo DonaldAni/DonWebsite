@@ -32,13 +32,24 @@ function processtags(tags) {
     }
 }
 
+// utils
+async function imageExists(src) {
+    try {
+        const res = await(fetch(src, { method: 'HEAD' }))
+        return res.ok
+    } catch(e) {
+        return false
+    }
+}
+
 // get clip from url
 let rawparams = window.location.search
 let params = new URLSearchParams(rawparams)
 
 let clip = params.get("clip")
 
-function lookforclipdata(data) {
+async function lookforclipdata(data) {
+    console.log(data, clip)
     let gottenclip = data[clip]
     if(!gottenclip) {
         throw new Error("could not find clip")
@@ -54,6 +65,8 @@ function lookforclipdata(data) {
         WEEK.innerText = gottenclip.week
     } else {
         TITLE_TIMEFRAME.innerText = "YEAR"
+        TITLE_TIMEFRAME.classList.add("coty-gradient", "coty-title")
+
         TIMEFRAME.innerText = "year"
 
         WEEK.innerText = gottenclip.year
@@ -62,14 +75,19 @@ function lookforclipdata(data) {
     if(gottenclip.tags) {
         processtags(gottenclip.tags)
     }
-    // if(gottenclip.featuring) {
-    //     for(const person of gottenclip.featuring) {
-    //         let pfp = document.createElement("img")
-    //             pfp.src = `pfps/${person}.png`
+    if(gottenclip.featuring && false) {
+        for(const person of gottenclip.featuring) {
+            let pfpsrc = `pfps/${person}.png`
 
-    //         FEATURING.append(pfp)
-    //     }
-    // }
+            let pfp = document.createElement("img")
+                pfp.src = (await imageExists(pfpsrc)) ? pfpsrc : 'pfps/default.png'
+                pfp.title = `This clip features ${person.charAt(0).toUpperCase() + person.slice(1)}`
+
+            FEATURING.append(pfp)
+        }
+    } else {
+        document.getElementById("ftgroup").remove()
+    }
 
     LOADING.remove()
     document.getElementById("waitforload").id = ""
@@ -81,14 +99,17 @@ async function load() {
     let clipdata = await clipres.json()
 
     try {
-        lookforclipdata(clipdata)
+        await lookforclipdata(clipdata)
     } catch(e) {
+        console.warn(`failed to get clip: ${e}\ntrying coty list`)
+
         let cotyres = await fetch("clipsoftheyears.json")
         let cotydata = await cotyres.json()
 
         try {
-            lookforclipdata(cotydata)
+            await lookforclipdata(cotydata)
         } catch(e) {
+            console.warn(e)
             LOADING.innerText = "ERROR GETTING CLIP! Are you sure it exists?"
         }
     }

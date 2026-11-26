@@ -119,3 +119,35 @@ video-card:active {
     background-color: rgb(65, 65, 65);
     cursor: pointer;
 }
+
+:root {
+    --coty-title-color: rgb(255, 0, 149);
+    --coty-title-gradient: linear-gradient(180deg,rgba(255, 0, 149, 1) 0%, rgb(255, 133, 208) 36%, rgba(255, 0, 149, 1) 75%, rgba(255, 0, 149, 1) 100%);
+
+    --coty-subtitle-color: rgb(190, 0, 190);
+    --coty-subtitle-gradient: linear-gradient(90deg,rgba(190, 0, 190, 1) 0%, rgb(152, 0, 199) 100%);
+}
+
+.coty {
+    color: var(--coty-title-color);
+}
+.coty-gradient {
+    background-clip: text; 
+    color: transparent; 
+}
+.coty-title {
+    background-color: var(--coty-title-color); 
+    background-image: var(--coty-title-gradient);
+ 
+    /* transform: skewX(-15deg); */
+}
+.coty-title:not(span.coty-title) {
+    font-size: 300%;
+    font-style: italic;
+}
+.coty-subtitle {
+    background-color: var(--coty-subtitle-color); 
+    background-image: var(--coty-subtitle-gradient);
+
+    display: inline;
+}

@@ -9,17 +9,26 @@ hr {
 }
 
 /* classes/ids */
+#clipparent {
+    position: relative;
+    display: inline-block;
+
+    height: 30rem;
+}
 #clip {
     display: block;
-    height: 30rem;
-    align-self: center;
+    margin: auto;
+
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
 
     border: 2px solid white;
 }
 @media(max-width: 1000px) {
-    #clip {
+    #clipparent {
         width: 90%;
-        height: auto;
     }
 }
 
@@ -27,21 +36,31 @@ hr {
     display: none;
 }
 
-#clipparent {
+#ftgroup {
     position: relative;
-    display: inline-block;
+        bottom: 0;
+        left: 0%;
+
+    padding-top: 2px;
+    text-align: left;
+}
+#ftgroup > p {
+    /* display: inline; */
+
+    margin: 0;
+    padding: 0;
+    margin-bottom: 2px;
+
+    text-decoration: underline;
 }
 #ft {
     display: flex;
         flex-direction: row;
         gap: 5px;
-    
-    position: relative;
-        top: 100%;
-        left: 0%;
 
     width: max-content;
     height: 50px;
-
-    padding-top: 2px;
+}
+#ft > img:hover {
+    cursor:help;
 }
