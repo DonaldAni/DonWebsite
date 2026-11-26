@@ -1,3 +1,16 @@
+// pages in which the music player is not allowed to appear
+const BLACKLISTS = [
+    "/piano/"
+]
+
+if(!BLACKLISTS.includes(window.location.pathname)) {
+    makeplayer()
+} else {
+    console.info("music player disabled on this page")
+}
+
+function makeplayer() {
+
 const SAVE_KEY = "musicplayeridx"
 
 // player vars
@@ -247,3 +260,5 @@ function loop(dt) {
     requestAnimationFrame(loop)
 }
 requestAnimationFrame(loop)
+
+}
