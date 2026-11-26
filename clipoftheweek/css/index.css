@@ -9,14 +9,14 @@
     width: 100%;
     
     display: grid;
-    grid-template-columns: repeat(auto-fit, 327px);
+    grid-template-columns: repeat(5, 1fr);
     
     row-gap: 15px;
     column-gap: 5px;
 }
 @media (max-width: 1000px) {
     #cardcontainer {
-        grid-template-columns: repeat(auto-fit, 100%);
+        grid-template-columns: 50% 50%;
 
         padding-left: 5%;
         padding-right: 5%;
@@ -109,11 +109,6 @@ video-card:active {
     padding: 5px;
     margin: 0;
     transition: background-color .065s linear;
-}
-@media (max-width: 1000px) {
-    #cotycontainer:not(:empty) {
-        grid-column: span 1;
-    }
 }
 #cotycontainer:hover {
     background-color: rgb(65, 65, 65);
