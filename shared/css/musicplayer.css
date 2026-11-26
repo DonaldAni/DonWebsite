@@ -19,6 +19,7 @@
     border-top-right-radius: 10px;
 
     font-family: 'comic sans';
+    font-size: 20px;
 }
 @media (max-width: 1000px) {
     #musicplayerroot {
